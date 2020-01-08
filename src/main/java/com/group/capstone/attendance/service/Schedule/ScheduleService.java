@@ -7,5 +7,5 @@ import java.util.List;
 
 @Service
 public interface ScheduleService {
-    public List<StudentScheduleDto> getScheduleByIdStudent (int student_id);
+    public List<StudentScheduleDto> getScheduleByIdStudent (int student_id, String date);
 }

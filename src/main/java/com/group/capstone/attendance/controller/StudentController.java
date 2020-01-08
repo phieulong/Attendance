@@ -28,8 +28,8 @@ public class StudentController {
             @ApiResponse(code = 500, message="Error Server"),
     })
     @GetMapping("/schedule/{id}")
-    public ResponseEntity<?> getScheduleByIdStudent(@PathVariable int id) {
-        List<StudentScheduleDto> studentScheduleDtoList = scheduleService.getScheduleByIdStudent(id);
+    public ResponseEntity<?> getScheduleByIdStudent(@PathVariable int id, String date) {
+        List<StudentScheduleDto> studentScheduleDtoList = scheduleService.getScheduleByIdStudent(id, date);
         return ResponseEntity.ok(studentScheduleDtoList);
     }
 }

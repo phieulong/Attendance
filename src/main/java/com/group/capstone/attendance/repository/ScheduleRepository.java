@@ -12,5 +12,5 @@ import java.util.List;
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query(nativeQuery = true, name = "findScheduleByStudentId")
-    public List<StudentScheduleDto> getScheduleByIdStudent(int student_id);
+    public List<StudentScheduleDto> getScheduleByIdStudent(int student_id, String date);
 }
