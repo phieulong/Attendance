@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/student")
 @Api(value = "Student Apis")
@@ -26,8 +28,8 @@ public class StudentController {
             @ApiResponse(code = 500, message="Error Server"),
     })
     @GetMapping("/schedule/{id}")
-    public ResponseEntity<?> getScheduleByIdStudent(@PathVariable int student_id) {
-        StudentScheduleDto studentScheduleDto = scheduleService.getScheduleByIdStudent(student_id);
-        return ResponseEntity.ok(studentScheduleDto);
+    public ResponseEntity<?> getScheduleByIdStudent(@PathVariable int id) {
+        List<StudentScheduleDto> studentScheduleDtoList = scheduleService.getScheduleByIdStudent(id);
+        return ResponseEntity.ok(studentScheduleDtoList);
     }
 }

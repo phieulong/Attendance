@@ -16,11 +16,11 @@ import java.util.List;
                 classes = @ConstructorResult(
                         targetClass = StudentScheduleDto.class,
                         columns = {
+                                @ColumnResult(name = "date"),
+                                @ColumnResult(name = "time_start"),
                                 @ColumnResult(name = "teacher"),
                                 @ColumnResult(name = "subject"),
                                 @ColumnResult(name = "class"),
-                                @ColumnResult(name = "date"),
-                                @ColumnResult(name = "time_start"),
                                 @ColumnResult(name = "room"),
                                 @ColumnResult(name = "present"),
                                 @ColumnResult(name = "status"),

@@ -31,11 +31,11 @@ public class Category {
 
     @NotNull
     @Column(name = "timeStart")
-    private Time timeStart;
+    private Date timeStart;
 
     @NotNull
     @Column(name = "timeFinish")
-    private Time timeFinish;
+    private Date timeFinish;
 
     @NotNull
     @Column(name = "createdAt")

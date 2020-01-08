@@ -1,5 +1,6 @@
 package com.group.capstone.attendance.entity;
 
+import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
