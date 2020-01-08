@@ -8,22 +8,25 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="terms")
+@Table(name="term")
 public class Term {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
+    private int id;
+
+    @OneToMany(mappedBy = "term")
+    private List<ClassTerm> classTermList;
 
     @NotNull
     @Column(name = "name")
-    private String Name;
-
+    private String name;
 
     @NotNull
     @Column(name = "timeBegin")

@@ -8,43 +8,47 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="registrations")
+@Table(name="registration")
 public class Registration {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
+    private int id;
 
     @ManyToOne
-    @JoinColumn(name = "classes_id")
+    @JoinColumn(name = "class_id")
     private Class aClass;
 
     @OneToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "registration")
+    private List<Attendance> attendanceList;
 
     @NotNull
     @Column(name = "createdAt")
-    private Date CreatedAt;
+    private Date createdAt;
 
     @NotNull
     @Column(name = "createdBy")
-    private int CreatedBy;
+    private int createdBy;
 
     @NotNull
     @Column(name = "updatedAt")
-    private Date UpdatedAt;
+    private Date updatedAt;
 
     @NotNull
     @Column(name = "updatedBy")
-    private int UpdatedBy;
+    private int updatedBy;
 
     @NotNull
     @Column(name = "status")
-    private Boolean Status;
+    private Boolean status;
 }

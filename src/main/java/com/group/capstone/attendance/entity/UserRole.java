@@ -19,29 +19,29 @@ import java.util.List;
 public class UserRole {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
+    private int id;
 
     @ManyToOne
-    @JoinColumn(name = "roles_id")
+    @JoinColumn(name = "role_id")
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @NotNull
     @Column(name = "createdAt")
-    private Date CreatedAt;
+    private Date createdAt;
 
     @NotNull
     @Column(name = "createdBy")
-    private int CreatedBy;
+    private int createdBy;
 
     @NotNull
     @Column(name = "updatedAt")
-    private int UpdatedAt;
+    private Date updatedAt;
 
     @NotNull
     @Column(name = "updatedBy")
-    private int UpdatedBy;
+    private int updatedBy;
 }

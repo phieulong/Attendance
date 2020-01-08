@@ -15,22 +15,22 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="subject")
-public class Subject {
+@Table(name="classTerm")
+public class ClassTerm {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @OneToMany(mappedBy = "subject")
+    @ManyToOne
+    @JoinColumn(name = "class_id")
+    private Class aClass;
+
+    @ManyToOne
+    @JoinColumn(name = "term_id")
+    private Term term;
+
+    @OneToMany(mappedBy = "classTerm")
     private List<Schedule> scheduleList;
-
-    @NotNull
-    @Column(name = "name",unique = true)
-    private String name;
-
-    @NotNull
-    @Column(name = "description")
-    private String description;
 
     @NotNull
     @Column(name = "createdAt")
@@ -47,8 +47,4 @@ public class Subject {
     @NotNull
     @Column(name = "updatedBy")
     private int updatedBy;
-
-    @NotNull
-    @Column(name = "status")
-    private Boolean status;
 }

@@ -7,48 +7,53 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Time;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="categories")
+@Table(name="category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
+    private int id;
+
+    @OneToMany(mappedBy = "category")
+    private List<Schedule> scheduleList;
 
     @NotNull
     @Column(name = "name", unique = true)
-    private String Name;
+    private String name;
 
     @NotNull
     @Column(name = "timeStart")
-    private Date TimeStart;
+    private Time timeStart;
 
     @NotNull
     @Column(name = "timeFinish")
-    private Date TimeFinish;
+    private Time timeFinish;
 
     @NotNull
     @Column(name = "createdAt")
-    private Date CreatedAt;
+    private Date createdAt;
 
     @NotNull
     @Column(name = "createdBy")
-    private int CreatedBy;
+    private int createdBy;
 
     @NotNull
     @Column(name = "updatedAt")
-    private Date UpdatedAt;
+    private Date updatedAt;
 
     @NotNull
     @Column(name = "updatedBy")
-    private int UpdatedBy;
+    private int updatedBy;
 
     @NotNull
     @Column(name = "status")
-    private Boolean Status;
+    private Boolean status;
 }

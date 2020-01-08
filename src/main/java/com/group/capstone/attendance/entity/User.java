@@ -8,55 +8,68 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="users")
+@Table(name="user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
+    private int id;
+
+    @OneToOne(mappedBy = "masterTrainer")
+    private Class aClass;
+
+    @OneToMany(mappedBy = "subTrainer")
+    private List<Schedule> scheduleList;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserRole> userRoleList;
 
     @NotNull
     @Column(name = "account", unique = true)
-    private String Account;
+    private String account;
 
     @NotNull
     @Column(name = "password")
-    private String Password;
+    private String password;
 
     @NotNull
     @Column(name = "firstName")
-    private String FirstName;
+    private String firstName;
 
     @NotNull
     @Column(name = "lastName")
-    private String LassName;
+    private String lassName;
 
     @NotNull
     @Column(name = "email", unique = true)
-    private String Email;
+    private String email;
+
+    @Column(name = "picture")
+    private String picture;
 
     @NotNull
     @Column(name = "createdAt")
-    private Date CreatedAt;
+    private Date createdAt;
 
     @NotNull
     @Column(name = "createdBy")
-    private int CreatedBy;
+    private int createdBy;
 
     @NotNull
     @Column(name = "updatedAt")
-    private Date UpdatedAt;
+    private Date updatedAt;
 
     @NotNull
     @Column(name = "updatedBy")
-    private int UpdatedBy;
+    private int updatedBy;
 
     @NotNull
     @Column(name = "status")
-    private boolean Status;
+    private Boolean status;
 }

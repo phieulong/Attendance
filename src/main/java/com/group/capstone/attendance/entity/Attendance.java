@@ -15,45 +15,41 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="attendances")
+@Table(name="attendance")
 public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
+    private int id;
 
     @ManyToOne
-    @JoinColumn(name = "registrations_id")
+    @JoinColumn(name = "registration_id")
     private Registration registration;
 
     @ManyToOne
-    @JoinColumn(name = "schedules_id")
+    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
     @NotNull
     @Column(name = "isPresent")
-    private boolean IsPresent;
+    private boolean isPresent;
 
     @Column(name = "description")
-    private String Description;
+    private String description;
 
     @NotNull
     @Column(name = "createdAt")
-    private Date CreatedAt;
+    private Date createdAt;
 
     @NotNull
     @Column(name = "createdBy")
-    private int CreatedBy;
+    private int createdBy;
 
     @NotNull
     @Column(name = "updatedAt")
-    private Date UpdatedAt;
+    private Date updatedAt;
 
     @NotNull
     @Column(name = "updatedBy")
-    private int UpdatedBy;
-
-    @NotNull
-    @Column(name = "status")
-    private Boolean Status;
+    private int updatedBy;
 }
 

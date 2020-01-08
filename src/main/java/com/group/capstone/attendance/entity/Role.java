@@ -8,17 +8,21 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="roles")
+@Table(name="role")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
+    private int id;
+
+    @OneToMany(mappedBy = "role")
+    private List<UserRole> userRoleList;
 
     @NotNull
     @Column(name = "name",unique = true)
@@ -26,22 +30,21 @@ public class Role {
 
     @NotNull
     @Column(name = "createdAt")
-    private Date CreatedAt;
+    private Date createdAt;
 
     @NotNull
     @Column(name = "createdBy")
-    private int CreatedBy;
+    private int createdBy;
 
     @NotNull
     @Column(name = "updatedAt")
-    private Date UpdatedAt;
+    private Date updatedAt;
 
     @NotNull
     @Column(name = "updatedBy")
-    private int UpdatedBy;
+    private int updatedBy;
 
     @NotNull
     @Column(name = "status")
-    private Boolean Status;
-
+    private Boolean status;
 }

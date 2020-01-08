@@ -8,25 +8,28 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="classes")
+@Table(name="class")
 public class Class {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
 
     @OneToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "user_id")
     private User masterTrainer;
 
-    @ManyToOne
-    @JoinColumn(name = "terms_id")
-    private Term term;
+    @OneToMany(mappedBy = "aClass")
+    private List<ClassTerm> classTermList;
+
+    @OneToMany(mappedBy = "aClass")
+    private List<Registration> registrationList;
 
     @NotNull
     @Column(name = "name", unique = true)
@@ -50,5 +53,5 @@ public class Class {
 
     @NotNull
     @Column(name = "status")
-    private String Status;
+    private Boolean Status;
 }

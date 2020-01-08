@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ScheduleService {
-    public StudentScheduleDto getAllScheduleForStudent(int classes_id);
+    public StudentScheduleDto getScheduleByIdStudent (int student_id);
 }

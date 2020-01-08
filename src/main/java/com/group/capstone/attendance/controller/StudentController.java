@@ -28,7 +28,7 @@ public class StudentController {
     })
     @GetMapping("/schedule/{id}")
     public ResponseEntity<?> getScheduleByIdStudent(@PathVariable int id) {
-        StudentScheduleDto schedule = scheduleService.getAllScheduleForStudent(id);
+        StudentScheduleDto schedule = scheduleService.getScheduleByIdStudent(id);
         return ResponseEntity.ok(schedule);
     }
 }
