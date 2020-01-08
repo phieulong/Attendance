@@ -1,6 +1,5 @@
 package com.group.capstone.attendance.controller;
 
-import com.group.capstone.attendance.entity.Schedule;
 import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDto;
 import com.group.capstone.attendance.service.Schedule.ScheduleService;
 import io.swagger.annotations.Api;
@@ -27,8 +26,8 @@ public class StudentController {
             @ApiResponse(code = 500, message="Error Server"),
     })
     @GetMapping("/schedule/{id}")
-    public ResponseEntity<?> getScheduleByIdStudent(@PathVariable int id) {
-        StudentScheduleDto schedule = scheduleService.getScheduleByIdStudent(id);
-        return ResponseEntity.ok(schedule);
+    public ResponseEntity<?> getScheduleByIdStudent(@PathVariable int student_id) {
+        StudentScheduleDto studentScheduleDto = scheduleService.getScheduleByIdStudent(student_id);
+        return ResponseEntity.ok(studentScheduleDto);
     }
 }

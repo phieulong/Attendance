@@ -13,9 +13,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
-    ScheduleRepository scheduleRepository;
+    private ScheduleRepository scheduleRepository;
 
     public StudentScheduleDto getScheduleByIdStudent (int student_id){
-        return scheduleRepository.getScheduleByIdStudent(student_id);
+        StudentScheduleDto studentScheduleDto = scheduleRepository.getScheduleByIdStudent(student_id);
+        return studentScheduleDto;
     }
 }

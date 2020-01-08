@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query(nativeQuery = true, name = "findScheduleByStudentId")
-    public StudentScheduleDto getScheduleByIdStudent(@Param("id") int id);
+    public StudentScheduleDto getScheduleByIdStudent(int id);
 }
