@@ -43,7 +43,7 @@ import java.util.List;
                 "Join subject s on sc.subject_id = s.id\n" +
                 "Join room r on sc.room_id = r.id\n" +
                 "Join attendance a on a.schedule_id = sc.id and a.registration_id = rg.id\n" +
-                "where u.id = ?1 and sc.date = ?2")
+                "where rg.id = ?1 and sc.date = ?2")
 @Getter
 @Setter
 @AllArgsConstructor
