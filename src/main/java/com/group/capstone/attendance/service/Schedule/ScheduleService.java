@@ -1,7 +1,6 @@
 package com.group.capstone.attendance.service.Schedule;
 
 import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDetailDto;
-import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDto;
 import com.group.capstone.attendance.model.Schedule.dto.TeacherScheduleDto;
 import org.springframework.stereotype.Service;
 
