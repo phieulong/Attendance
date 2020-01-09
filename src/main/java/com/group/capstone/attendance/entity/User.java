@@ -1,6 +1,6 @@
 package com.group.capstone.attendance.entity;
 
-import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDto;
+import com.group.capstone.attendance.model.User.dto.UserInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,38 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+@SqlResultSetMappings(value = {
+        @SqlResultSetMapping(
+                name = "UserInfo",
+                classes = @ConstructorResult(
+                        targetClass = UserInfo.class,
+                        columns = {
+                                @ColumnResult(name = "name", type = String.class),
+                                @ColumnResult(name = "class", type = String.class),
+                                @ColumnResult(name = "email", type = String.class),
+                                @ColumnResult(name = "account", type = String.class),
+                                @ColumnResult(name = "avatar", type = String.class),
+                        }
+                )
+        )
+})
+
+@NamedNativeQuery(name = "getTeacherInfo", resultSetMapping = "UserInfo",
+        query = "select concat(u.first_name, u.last_name) as name, " +
+                "cl.name as class, u.email, u.account, u.picture as avatar\n" +
+                "from user u\n" +
+                "Join class cl on cl.user_id = u.id\n" +
+                "where u.id = 1")
+
+
+@NamedNativeQuery(name = "getStudentInfo", resultSetMapping = "UserInfo",
+        query = "SELECT concat(u.first_name, u.last_name) as name, " +
+                "cl.name as class, u.email, u.account, u.picture as avatar\n" +
+                "FROM user u \n" +
+                "join registration rg on rg.user_id = u.id\n" +
+                "join class cl on cl.id = rg.class_id\n" +
+                "where u.id = ?1")
+
 
 @Getter
 @Setter

@@ -2,9 +2,10 @@ package com.group.capstone.attendance.controller;
 
 import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDetailDto;
 import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDto;
-import com.group.capstone.attendance.model.Schedule.dto.TeacherScheduleDto;
+import com.group.capstone.attendance.model.User.dto.UserInfo;
 import com.group.capstone.attendance.service.Attendance.AttendanceService;
 import com.group.capstone.attendance.service.Schedule.ScheduleService;
+import com.group.capstone.attendance.service.User.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -23,6 +24,8 @@ public class StudentController {
     private ScheduleService scheduleService;
     @Autowired
     private AttendanceService attendanceService;
+    @Autowired
+    private UserService userService;
 
     @ApiOperation(value = "Get a schedule by student_id", response = StudentScheduleDto.class)
     @ApiResponses({
@@ -45,4 +48,16 @@ public class StudentController {
         String result = attendanceService.setAttendanceByStudent(id,schedule_id);
         return ResponseEntity.ok(result);
     }
+
+    @ApiOperation(value = "Get a schedule by student_id", response = UserInfo.class)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Record not found"),
+            @ApiResponse(code = 500, message = "Error Server"),
+    })
+    @GetMapping("/Info/{id}")
+    public ResponseEntity<?> getStudentInfo(@PathVariable int id) {
+        UserInfo userInfo = userService.getStudentInfo(id);
+        return ResponseEntity.ok(userInfo);
+    }
+
 }

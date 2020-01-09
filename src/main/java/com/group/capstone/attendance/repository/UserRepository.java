@@ -1,7 +1,7 @@
 package com.group.capstone.attendance.repository;
 
 import com.group.capstone.attendance.entity.User;
-import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDto;
+import com.group.capstone.attendance.model.User.dto.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -26,4 +26,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                                         "Join role r on r.id = ur.role_id\n" +
                                         "Where u.account = ?1")
     public List<String> getRoleByAccount(String account);
+
+    @Query(nativeQuery = true, name = "getStudentInfo")
+    public UserInfo getStudentInfo(int id);
+
+    @Query(nativeQuery = true, name = "getTeacherInfo")
+    public UserInfo getTeacherInfo(int id);
 }

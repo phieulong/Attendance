@@ -1,6 +1,7 @@
 package com.group.capstone.attendance.service.User;
 
 import com.group.capstone.attendance.entity.User;
+import com.group.capstone.attendance.model.User.dto.UserInfo;
 import com.group.capstone.attendance.model.User.dto.UserLoginInfoDto;
 import com.group.capstone.attendance.model.User.mapper.UserLoginInfoMapper;
 import com.group.capstone.attendance.repository.UserRepository;
@@ -18,5 +19,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByAccount(account);
         List<String> roles = userRepository.getRoleByAccount(account);
         return UserLoginInfoMapper.toUserLoginInfoDto(user, roles);
+    }
+
+    public UserInfo getStudentInfo(int id){
+        return userRepository.getStudentInfo(id);
+    }
+
+    public UserInfo getTeacherInfo(int id){
+        return userRepository.getTeacherInfo(id);
     }
 }
