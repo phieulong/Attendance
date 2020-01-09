@@ -37,6 +37,7 @@ import java.util.List;
                         targetClass = TeacherScheduleDto.class,
                         columns = {
                                 @ColumnResult(name = "schedule_id", type = Integer.class),
+                                @ColumnResult(name = "date", type = String.class),
                                 @ColumnResult(name = "time_start", type = String.class),
                                 @ColumnResult(name = "class_name", type = String.class),
                                 @ColumnResult(name = "subject", type = String.class),
@@ -53,7 +54,9 @@ import java.util.List;
 
 
 @NamedNativeQuery(name = "findScheduleByTeacherId", resultSetMapping = "TeacherScheduleInfo",
-        query = "select sc.id as schedule_id, TIME_FORMAT(cg.time_start, '%H:%i:%s') as time_start , c.name as class_name, " +
+        query = "select sc.id as schedule_id, DATE_FORMAT(sc.date, '%d/%m/%Y') as date," +
+                " TIME_FORMAT(cg.time_start, '%H:%i:%s') as time_start , " +
+                "c.name as class_name, " +
                 "s.name as subject, r.name as room, \n" +
                 "(select count(rgt.id)\n" +
                 "from registration rgt\n" +
@@ -75,7 +78,7 @@ import java.util.List;
         query = "select sc.id,\n" +
                 "(select user.first_name\n" +
                 "from user where user.id = sc.user_id) as teacher,\n" +
-                "s.name as subject, cl.name as class, DATE_FORMAT(sc.date, '%d:%m:%Y') as date," +
+                "s.name as subject, cl.name as class, DATE_FORMAT(sc.date, '%d/%m/%Y') as date," +
                 " TIME_FORMAT(cg.time_start, '%H:%i:%s') as time_start," +
                 " r.name as room,\n" +
                 " a.is_present as present, sc.status\n" +
