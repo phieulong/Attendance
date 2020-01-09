@@ -4,6 +4,7 @@ import com.group.capstone.attendance.entity.Registration;
 import com.group.capstone.attendance.entity.Schedule;
 import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDetailDto;
 import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDto;
+import com.group.capstone.attendance.model.Schedule.dto.TeacherScheduleDto;
 import com.group.capstone.attendance.model.Schedule.mapper.ScheduleMapper;
 import com.group.capstone.attendance.repository.ClassRepository;
 import com.group.capstone.attendance.repository.RegistrationRepository;
@@ -37,5 +38,9 @@ public class ScheduleServiceImpl implements ScheduleService {
             return studentScheduleDetailDtoList;
         }
         return null;
+    }
+
+    public List<TeacherScheduleDto> getScheduleByIdTeacher (int teacher_id, String date){
+        return scheduleRepository.getScheduleByIdTeacher(teacher_id, date);
     }
 }

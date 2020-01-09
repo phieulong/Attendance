@@ -15,8 +15,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class StudentScheduleDto {
     private int schedule_id;
-    private Date date;
-    private Date time_start;
+    private String date;
+    private String time_start;
     private String teacher;
     private String subject;
     private String class_name;

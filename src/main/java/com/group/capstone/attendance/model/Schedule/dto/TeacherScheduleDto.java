@@ -5,22 +5,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Time;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentScheduleDetailDto {
+public class TeacherScheduleDto {
     private int schedule_id;
-    private String date;
     private String time_start;
-    private String teacher;
-    private String subject;
     private String class_name;
+    private String subject;
     private String room;
-    private Boolean present;
+    private int total;
+    private int total_attendance;
     private Boolean status;
-    private List<String>  avatar_5_friends;
 }
+

@@ -20,10 +20,10 @@ public class StudentController {
     @Autowired
     private ScheduleService scheduleService;
 
-    @ApiOperation(value="Get a schedule by student_id", response = StudentScheduleDto.class)
+    @ApiOperation(value = "Get a schedule by student_id", response = StudentScheduleDto.class)
     @ApiResponses({
-            @ApiResponse(code = 404, message="Record not found"),
-            @ApiResponse(code = 500, message="Error Server"),
+            @ApiResponse(code = 404, message = "Record not found"),
+            @ApiResponse(code = 500, message = "Error Server"),
     })
     @GetMapping("/schedule/{id}")
     public ResponseEntity<?> getScheduleByIdStudent(@PathVariable int id, String date) {

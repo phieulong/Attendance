@@ -1,6 +1,7 @@
 package com.group.capstone.attendance.entity;
 
 import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDto;
+import com.group.capstone.attendance.model.Schedule.dto.TeacherScheduleDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 @SqlResultSetMappings(value = {
@@ -16,24 +18,66 @@ import java.util.List;
                 classes = @ConstructorResult(
                         targetClass = StudentScheduleDto.class,
                         columns = {
-                                @ColumnResult(name = "id"),
-                                @ColumnResult(name = "date"),
-                                @ColumnResult(name = "time_start"),
-                                @ColumnResult(name = "teacher"),
-                                @ColumnResult(name = "subject"),
-                                @ColumnResult(name = "class"),
-                                @ColumnResult(name = "room"),
-                                @ColumnResult(name = "present"),
-                                @ColumnResult(name = "status"),
+                                @ColumnResult(name = "id", type = Integer.class),
+                                @ColumnResult(name = "date", type = String.class),
+                                @ColumnResult(name = "time_start", type = String.class),
+                                @ColumnResult(name = "teacher", type = String.class),
+                                @ColumnResult(name = "subject", type = String.class),
+                                @ColumnResult(name = "class", type = String.class),
+                                @ColumnResult(name = "room", type = String.class),
+                                @ColumnResult(name = "present", type = Boolean.class),
+                                @ColumnResult(name = "status", type = Boolean.class),
+                        }
+                )
+        ),
+
+        @SqlResultSetMapping(
+                name = "TeacherScheduleInfo",
+                classes = @ConstructorResult(
+                        targetClass = TeacherScheduleDto.class,
+                        columns = {
+                                @ColumnResult(name = "schedule_id", type = Integer.class),
+                                @ColumnResult(name = "time_start", type = String.class),
+                                @ColumnResult(name = "class_name", type = String.class),
+                                @ColumnResult(name = "subject", type = String.class),
+                                @ColumnResult(name = "room", type = String.class),
+                                @ColumnResult(name = "total", type = Integer.class),
+                                @ColumnResult(name = "total_attendance", type = Integer.class),
+                                @ColumnResult(name = "status", type = Boolean.class),
                         }
                 )
         )
 })
+
+
+
+
+@NamedNativeQuery(name = "findScheduleByTeacherId", resultSetMapping = "TeacherScheduleInfo",
+        query = "select sc.id as schedule_id, TIME_FORMAT(cg.time_start, '%H:%i:%s') as time_start , c.name as class_name, " +
+                "s.name as subject, r.name as room, \n" +
+                "(select count(rgt.id)\n" +
+                "from registration rgt\n" +
+                "join class cl on rgt.class_id = cl.id\n" +
+                "where cl.id = c.id) as total,\n" +
+                "(select count(atd.id)\n" +
+                "from attendance atd\n" +
+                "where atd.schedule_id = sc.id and atd.is_present = 1) as total_attendance, sc.status\n" +
+                "from schedule sc\n" +
+                "Join user u on sc.user_id = u.id\n" +
+                "Join category cg on sc.category_id = cg.id\n" +
+                "Join subject s on sc.subject_id = s.id\n" +
+                "Join room r on sc.room_id = r.id\n" +
+                "Join class_term ct on sc.class_term_id = ct.id\n" +
+                "Join class c on ct.class_id = c.id\n" +
+                "where u.id = ?1 and sc.date = ?2")
+
 @NamedNativeQuery(name = "findScheduleByStudentId", resultSetMapping = "UserScheduleInfo",
         query = "select sc.id,\n" +
                 "(select user.first_name\n" +
                 "from user where user.id = sc.user_id) as teacher,\n" +
-                "s.name as subject, cl.name as class, sc.date, cg.time_start, r.name as room,\n" +
+                "s.name as subject, cl.name as class, DATE_FORMAT(sc.date, '%d:%m:%Y') as date," +
+                " TIME_FORMAT(cg.time_start, '%H:%i:%s') as time_start," +
+                " r.name as room,\n" +
                 " a.is_present as present, sc.status\n" +
                 "From user u\n" +
                 "Join registration rg on u.id = rg.user_id\n" +
