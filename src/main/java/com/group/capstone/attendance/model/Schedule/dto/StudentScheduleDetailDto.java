@@ -1,19 +1,18 @@
 package com.group.capstone.attendance.model.Schedule.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Time;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentScheduleDto {
+public class StudentScheduleDetailDto {
     private int schedule_id;
     private Date date;
     private Date time_start;
@@ -23,4 +22,5 @@ public class StudentScheduleDto {
     private String room;
     private Boolean present;
     private Boolean status;
+    private List<String>  avatar_5_friends;
 }

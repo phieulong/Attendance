@@ -10,6 +10,13 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+    @Query(nativeQuery = true, value = "select u.picture " +
+                                        "from attendance atd " +
+                                        "JOIN registration r on atd.registration_id = r.id " +
+                                        "JOIN user u on r.user_id = u.id " +
+                                        "where atd.schedule_id = ?1 and atd.is_present = 1 " +
+                                        "limit 5")
+    public List<String> getUserPictureByScheduleId(int id);
 
     public User findByAccount(String account);
 

@@ -16,6 +16,7 @@ import java.util.List;
                 classes = @ConstructorResult(
                         targetClass = StudentScheduleDto.class,
                         columns = {
+                                @ColumnResult(name = "id"),
                                 @ColumnResult(name = "date"),
                                 @ColumnResult(name = "time_start"),
                                 @ColumnResult(name = "teacher"),
@@ -29,8 +30,8 @@ import java.util.List;
         )
 })
 @NamedNativeQuery(name = "findScheduleByStudentId", resultSetMapping = "UserScheduleInfo",
-        query = "select \n" +
-                "(select user.first_name \n" +
+        query = "select sc.id,\n" +
+                "(select user.first_name\n" +
                 "from user where user.id = sc.user_id) as teacher,\n" +
                 "s.name as subject, cl.name as class, sc.date, cg.time_start, r.name as room,\n" +
                 " a.is_present as present, sc.status\n" +
