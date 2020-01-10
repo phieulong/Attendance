@@ -54,7 +54,7 @@ public class StudentController {
             @ApiResponse(code = 404, message = "Record not found"),
             @ApiResponse(code = 500, message = "Error Server"),
     })
-    @GetMapping("/Info/{id}")
+    @GetMapping("/info/{id}")
     public ResponseEntity<?> getStudentInfo(@PathVariable int id) {
         UserInfo userInfo = userService.getStudentInfo(id);
         return ResponseEntity.ok(userInfo);

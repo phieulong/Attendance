@@ -75,7 +75,7 @@ import java.util.List;
 
 @NamedNativeQuery(name = "findScheduleByStudentId", resultSetMapping = "UserScheduleInfo",
         query = "select sc.id,\n" +
-                "(select user.first_name\n" +
+                "(select concat(u.last_name,\" \",u.first_name)\n" +
                 "from user where user.id = sc.user_id) as teacher,\n" +
                 "s.name as subject, cl.name as class, DATE_FORMAT(sc.date, '%d/%m/%Y') as date," +
                 " TIME_FORMAT(cg.time_start, '%H:%i:%s') as time_start," +
@@ -90,7 +90,7 @@ import java.util.List;
                 "Join subject s on sc.subject_id = s.id\n" +
                 "Join room r on sc.room_id = r.id\n" +
                 "Join attendance a on a.schedule_id = sc.id and a.registration_id = rg.id\n" +
-                "where rg.id = ?1 and sc.date = ?2")
+                "where u.id = ?1 and sc.date = ?2")
 @Getter
 @Setter
 @AllArgsConstructor

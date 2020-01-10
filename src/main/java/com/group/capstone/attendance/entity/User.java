@@ -27,7 +27,7 @@ import java.util.List;
 })
 
 @NamedNativeQuery(name = "getTeacherInfo", resultSetMapping = "UserInfo",
-        query = "select concat(u.first_name, u.last_name) as name, " +
+        query = "select concat(u.last_name,\" \",u.first_name) as name, " +
                 "cl.name as class, u.email, u.account, u.picture as avatar\n" +
                 "from user u\n" +
                 "Join class cl on cl.user_id = u.id\n" +
@@ -35,7 +35,7 @@ import java.util.List;
 
 
 @NamedNativeQuery(name = "getStudentInfo", resultSetMapping = "UserInfo",
-        query = "SELECT concat(u.first_name, u.last_name) as name, " +
+        query = "SELECT concat(u.last_name,\" \",u.first_name) as name, " +
                 "cl.name as class, u.email, u.account, u.picture as avatar\n" +
                 "FROM user u \n" +
                 "join registration rg on rg.user_id = u.id\n" +
