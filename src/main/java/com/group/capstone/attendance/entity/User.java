@@ -59,6 +59,7 @@ import java.util.List;
                 "join role r on ur.role_id = r.id\n" +
                 "where r.id = 1 and u.status = 1")
 
+
 @Getter
 @Setter
 @AllArgsConstructor

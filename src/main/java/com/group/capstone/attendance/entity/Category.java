@@ -1,5 +1,6 @@
 package com.group.capstone.attendance.entity;
 
+import com.group.capstone.attendance.model.Category.dto.CategoryInfoDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,27 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+@SqlResultSetMappings(value = {
+        @SqlResultSetMapping(
+                name = "CategoryInfo",
+                classes = @ConstructorResult(
+                        targetClass = CategoryInfoDto.class,
+                        columns = {
+                                @ColumnResult(name = "id", type = Integer.class),
+                                @ColumnResult(name = "name", type = String.class),
+                                @ColumnResult(name = "time_start", type = String.class),
+                                @ColumnResult(name = "time_finish", type = String.class),
+                        }
+                )
+        )
+})
 
+@NamedNativeQuery(name = "getAllCategoryInfo", resultSetMapping = "CategoryInfo",
+        query = "select cg.id, cg.name, \n" +
+                "time_format(cg.time_start, \"%H:%i:%s\") as time_start,\n" +
+                "time_format(cg.time_finish, \"%H:%i:%s\") as time_finish  \n" +
+                "from category cg\n" +
+                "where cg.status = 1")
 @Getter
 @Setter
 @AllArgsConstructor

@@ -1,6 +1,7 @@
 package com.group.capstone.attendance.controller;
 
 import com.group.capstone.attendance.model.Attendance.dto.TeacherAttendanceInfo;
+import com.group.capstone.attendance.model.Category.dto.CategoryInfoDto;
 import com.group.capstone.attendance.model.Class.dto.ClassDto;
 import com.group.capstone.attendance.model.Room.dto.RoomDto;
 import com.group.capstone.attendance.model.Schedule.dto.TeacherScheduleDto;
@@ -8,6 +9,7 @@ import com.group.capstone.attendance.model.Subject.dto.SubjectDto;
 import com.group.capstone.attendance.model.Term.dto.TermDto;
 import com.group.capstone.attendance.model.User.dto.UserInfo;
 import com.group.capstone.attendance.service.Attendance.AttendanceService;
+import com.group.capstone.attendance.service.Category.CategoryService;
 import com.group.capstone.attendance.service.Class.ClassService;
 import com.group.capstone.attendance.service.Room.RoomService;
 import com.group.capstone.attendance.service.Schedule.ScheduleService;
@@ -42,6 +44,8 @@ public class TeacherController {
     private RoomService roomService;
     @Autowired
     private TermService termService;
+    @Autowired
+    private CategoryService categoryService;
 
     @ApiOperation(value="Get a schedule by teacher_id", response = TeacherScheduleDto.class)
     @ApiResponses({
@@ -129,5 +133,16 @@ public class TeacherController {
     public ResponseEntity<?> getAllTermInfo() {
         List<TermDto> termDtoList = termService.getAllTermInfo();
         return ResponseEntity.ok(termDtoList);
+    }
+
+    @ApiOperation(value = "Get all category info", response = CategoryInfoDto.class)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Record not found"),
+            @ApiResponse(code = 500, message = "Error Server"),
+    })
+    @GetMapping("/getAllCategoryInfo")
+    public ResponseEntity<?> getAllCategoryInfo() {
+        List<CategoryInfoDto> categoryInfoDtoList = categoryService.getAllCategoryInfo();
+        return ResponseEntity.ok(categoryInfoDtoList);
     }
 }
