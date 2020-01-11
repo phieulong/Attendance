@@ -16,6 +16,7 @@ import java.util.List;
                 classes = @ConstructorResult(
                         targetClass = UserInfo.class,
                         columns = {
+                                @ColumnResult(name = "id", type = Integer.class),
                                 @ColumnResult(name = "name", type = String.class),
                                 @ColumnResult(name = "class", type = String.class),
                                 @ColumnResult(name = "email", type = String.class),
@@ -27,21 +28,30 @@ import java.util.List;
 })
 
 @NamedNativeQuery(name = "getTeacherInfo", resultSetMapping = "UserInfo",
-        query = "select concat(u.last_name,\" \",u.first_name) as name, " +
+        query = "select u.id\n" +
+                "concat(u.last_name,\" \",u.first_name) as name,\n" +
                 "cl.name as class, u.email, u.account, u.picture as avatar\n" +
                 "from user u\n" +
                 "Join class cl on cl.user_id = u.id\n" +
-                "where u.id = 1")
+                "where u.id = ?1")
 
 
 @NamedNativeQuery(name = "getStudentInfo", resultSetMapping = "UserInfo",
-        query = "SELECT concat(u.last_name,\" \",u.first_name) as name, " +
+        query = "SELECT u.id\n" +
+                "concat(u.last_name,\" \",u.first_name) as name,\n" +
                 "cl.name as class, u.email, u.account, u.picture as avatar\n" +
                 "FROM user u \n" +
                 "join registration rg on rg.user_id = u.id\n" +
                 "join class cl on cl.id = rg.class_id\n" +
                 "where u.id = ?1")
 
+@NamedNativeQuery(name = "getAllTeacher", resultSetMapping = "UserInfo",
+        query = "select u.id,\n" +
+                "concat(u.last_name,\" \", u.first_name) as name,\n" +
+                "cl.name as class, u.email, u.account, u.picture as avatar\n" +
+                "from class cl\n" +
+                "join user u on cl.user_id = u.id\n" +
+                "where u.status = 1")
 
 @Getter
 @Setter

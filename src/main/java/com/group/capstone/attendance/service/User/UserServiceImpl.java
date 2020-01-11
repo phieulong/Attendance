@@ -28,4 +28,8 @@ public class UserServiceImpl implements UserService {
     public UserInfo getTeacherInfo(int id){
         return userRepository.getTeacherInfo(id);
     }
+
+    public List<UserInfo> getAllTeacher(){
+        return userRepository.getAllTeacher();
+    }
 }

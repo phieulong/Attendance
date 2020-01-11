@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+
     @Query(nativeQuery = true, value = "select u.picture " +
                                         "from attendance atd " +
                                         "JOIN registration r on atd.registration_id = r.id " +
@@ -32,4 +33,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(nativeQuery = true, name = "getTeacherInfo")
     public UserInfo getTeacherInfo(int id);
+
+    @Query(nativeQuery = true, name = "getAllTeacher")
+    public List<UserInfo> getAllTeacher();
 }

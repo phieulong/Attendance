@@ -1,10 +1,16 @@
 package com.group.capstone.attendance.controller;
 
 import com.group.capstone.attendance.model.Attendance.dto.TeacherAttendanceInfo;
+import com.group.capstone.attendance.model.Class.dto.ClassDto;
+import com.group.capstone.attendance.model.Room.dto.RoomDto;
 import com.group.capstone.attendance.model.Schedule.dto.TeacherScheduleDto;
+import com.group.capstone.attendance.model.Subject.dto.SubjectDto;
 import com.group.capstone.attendance.model.User.dto.UserInfo;
 import com.group.capstone.attendance.service.Attendance.AttendanceService;
+import com.group.capstone.attendance.service.Class.ClassService;
+import com.group.capstone.attendance.service.Room.RoomService;
 import com.group.capstone.attendance.service.Schedule.ScheduleService;
+import com.group.capstone.attendance.service.Subject.SubjectService;
 import com.group.capstone.attendance.service.User.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +32,12 @@ public class TeacherController {
     private UserService userService;
     @Autowired
     private AttendanceService attendanceService;
+    @Autowired
+    private ClassService classService;
+    @Autowired
+    private SubjectService subjectService;
+    @Autowired
+    private RoomService roomService;
 
     @ApiOperation(value="Get a schedule by teacher_id", response = TeacherScheduleDto.class)
     @ApiResponses({
@@ -58,5 +70,49 @@ public class TeacherController {
     public ResponseEntity<?> getAttendanceList(@PathVariable int id) {
         List<TeacherAttendanceInfo> teacherAttendanceInfoList = attendanceService.getAttendanceListByScheduleId(id);
         return ResponseEntity.ok(teacherAttendanceInfoList);
+    }
+
+    @ApiOperation(value = "Get all teacher info", response = UserInfo.class)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Record not found"),
+            @ApiResponse(code = 500, message = "Error Server"),
+    })
+    @GetMapping("/getAllTeacherInfo")
+    public ResponseEntity<?> getAllTeacherInfo() {
+        List<UserInfo> userInfoList = userService.getAllTeacher();
+        return ResponseEntity.ok(userInfoList);
+    }
+
+    @ApiOperation(value = "Get all class info", response = ClassDto.class)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Record not found"),
+            @ApiResponse(code = 500, message = "Error Server"),
+    })
+    @GetMapping("/getAllClassInfo")
+    public ResponseEntity<?> getAllClassInfo() {
+        List<ClassDto> classDtoList = classService.getAllClassInfo();
+        return ResponseEntity.ok(classDtoList);
+    }
+
+    @ApiOperation(value = "Get all subject info", response = SubjectDto.class)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Record not found"),
+            @ApiResponse(code = 500, message = "Error Server"),
+    })
+    @GetMapping("/getAllSubjectInfo")
+    public ResponseEntity<?> getAllSubjectInfo() {
+        List<SubjectDto> subjectDtoList = subjectService.getAllSubjectDto();
+        return ResponseEntity.ok(subjectDtoList);
+    }
+
+    @ApiOperation(value = "Get all subject info", response = RoomDto.class)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Record not found"),
+            @ApiResponse(code = 500, message = "Error Server"),
+    })
+    @GetMapping("/getAllRoomInfo")
+    public ResponseEntity<?> getAllRoomInfo() {
+        List<RoomDto> roomDtoList = roomService.getAllRoomInfo();
+        return ResponseEntity.ok(roomDtoList);
     }
 }

@@ -1,4 +1,4 @@
-package com.group.capstone.attendance.model.User.dto;
+package com.group.capstone.attendance.model.Class.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,11 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfo {
+public class ClassDto {
     private int id;
-    private String name;
     private String class_name;
-    private String email;
-    private String account;
-    private String avatar_link;
+    private String master_trainer;
 }
