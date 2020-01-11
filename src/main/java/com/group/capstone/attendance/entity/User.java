@@ -28,12 +28,15 @@ import java.util.List;
 })
 
 @NamedNativeQuery(name = "getTeacherInfo", resultSetMapping = "UserInfo",
-        query = "select u.id\n" +
-                "concat(u.last_name,\" \",u.first_name) as name,\n" +
-                "cl.name as class, u.email, u.account, u.picture as avatar\n" +
-                "from user u\n" +
-                "Join class cl on cl.user_id = u.id\n" +
-                "where u.id = ?1")
+        query = "select u.id,concat(u.last_name,\" \", u.first_name) as name,\n" +
+                "(select cl.name\n" +
+                "from class cl\n" +
+                "where cl.user_id = u.id) as class,\n" +
+                "u.email, u.account, u.picture as avatar\n" +
+                "from user u \n" +
+                "join user_role ur on u.id = ur.user_id\n" +
+                "join role r on ur.role_id = r.id\n" +
+                "where r.id = 1 and u.status = 1 and u.id = ?1")
 
 
 @NamedNativeQuery(name = "getStudentInfo", resultSetMapping = "UserInfo",
@@ -46,12 +49,15 @@ import java.util.List;
                 "where u.id = ?1")
 
 @NamedNativeQuery(name = "getAllTeacher", resultSetMapping = "UserInfo",
-        query = "select u.id,\n" +
-                "concat(u.last_name,\" \", u.first_name) as name,\n" +
-                "cl.name as class, u.email, u.account, u.picture as avatar\n" +
+        query = "select u.id,concat(u.last_name,\" \", u.first_name) as name,\n" +
+                "(select cl.name\n" +
                 "from class cl\n" +
-                "join user u on cl.user_id = u.id\n" +
-                "where u.status = 1")
+                "where cl.user_id = u.id) as class,\n" +
+                "u.email, u.account, u.picture as avatar\n" +
+                "from user u \n" +
+                "join user_role ur on u.id = ur.user_id\n" +
+                "join role r on ur.role_id = r.id\n" +
+                "where r.id = 1 and u.status = 1")
 
 @Getter
 @Setter
