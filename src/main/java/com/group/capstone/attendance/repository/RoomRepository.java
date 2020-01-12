@@ -13,4 +13,9 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
                                         "from room\n" +
                                         "where room.status = 1")
     public List<Room> getAllRoomInfo();
+
+    @Query(nativeQuery = true, value = "select *\n" +
+                                        "from room\n" +
+                                        "where status = 1 and id = ?1")
+    public Room findById(int id);
 }

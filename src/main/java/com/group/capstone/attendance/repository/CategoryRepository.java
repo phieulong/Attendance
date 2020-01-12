@@ -10,4 +10,9 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Query(nativeQuery = true, name = "getAllCategoryInfo")
     public List<CategoryInfoDto> getAllCategoryInfo();
+
+    @Query(nativeQuery = true, value = "select *\n" +
+                                        "from category\n" +
+                                        "where status = 1 and id = ?1")
+    public Category findById(int id);
 }

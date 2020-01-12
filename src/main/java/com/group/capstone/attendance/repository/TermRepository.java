@@ -12,4 +12,9 @@ import java.util.List;
 public interface TermRepository extends JpaRepository<Term, Integer> {
     @Query(nativeQuery = true, name = "getAllTermInfo")
     public List<TermDto> getAllTermInfo();
+
+    @Query(nativeQuery = true, value = "select *\n" +
+                                        "from term\n" +
+                                        "where status = 1 and id = ?1")
+    public Term findById(int id);
 }

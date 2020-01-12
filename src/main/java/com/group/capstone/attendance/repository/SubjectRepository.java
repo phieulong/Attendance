@@ -13,4 +13,9 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
                                         "from subject\n" +
                                         "where subject.status = 1")
     public List<Subject> getAllSubjectInfo();
+
+    @Query(nativeQuery = true, value = "select *\n" +
+                                        "from subject\n" +
+                                        "where subject.status = 1 and subject.id = ?1")
+    public Subject findById(int id);
 }

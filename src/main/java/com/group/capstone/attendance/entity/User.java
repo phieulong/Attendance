@@ -40,7 +40,7 @@ import java.util.List;
 
 
 @NamedNativeQuery(name = "getStudentInfo", resultSetMapping = "UserInfo",
-        query = "SELECT u.id\n" +
+        query = "SELECT u.id,\n" +
                 "concat(u.last_name,\" \",u.first_name) as name,\n" +
                 "cl.name as class, u.email, u.account, u.picture as avatar\n" +
                 "FROM user u \n" +

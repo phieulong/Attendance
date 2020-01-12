@@ -36,4 +36,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(nativeQuery = true, name = "getAllTeacher")
     public List<UserInfo> getAllTeacher();
+
+    @Query(nativeQuery = true, value = "select *\n" +
+                                        "from user\n" +
+                                        "where status = 1 and id = ?")
+    public User findById(int id);
 }

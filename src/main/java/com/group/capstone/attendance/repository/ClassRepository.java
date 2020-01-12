@@ -14,4 +14,8 @@ public interface ClassRepository extends JpaRepository<Class, Integer> {
     @Query(nativeQuery = true, name = "getAllTeacherInfo")
     public List<ClassDto> getAllClassInfo();
 
+    @Query(nativeQuery = true, value = "select *\n" +
+                                        "from class\n" +
+                                        "where status = 1 and id = ?1")
+    public Class findById(int id);
 }

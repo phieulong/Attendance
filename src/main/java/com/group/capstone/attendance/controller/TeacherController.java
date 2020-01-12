@@ -5,6 +5,7 @@ import com.group.capstone.attendance.model.Category.dto.CategoryInfoDto;
 import com.group.capstone.attendance.model.Class.dto.ClassDto;
 import com.group.capstone.attendance.model.Room.dto.RoomDto;
 import com.group.capstone.attendance.model.Schedule.dto.TeacherScheduleDto;
+import com.group.capstone.attendance.model.Schedule.request.CreateScheduleRequest;
 import com.group.capstone.attendance.model.Subject.dto.SubjectDto;
 import com.group.capstone.attendance.model.Term.dto.TermDto;
 import com.group.capstone.attendance.model.User.dto.UserInfo;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -144,5 +146,16 @@ public class TeacherController {
     public ResponseEntity<?> getAllCategoryInfo() {
         List<CategoryInfoDto> categoryInfoDtoList = categoryService.getAllCategoryInfo();
         return ResponseEntity.ok(categoryInfoDtoList);
+    }
+
+    @ApiOperation(value="Create a schedule", response = CreateScheduleRequest.class)
+    @ApiResponses({
+            @ApiResponse(code = 400, message="Da ton tai schedule nay"),
+            @ApiResponse(code = 500, message="Server bi loi"),
+    })
+    @PostMapping("")
+    public ResponseEntity<?> createSchedule(@RequestBody @Valid CreateScheduleRequest createScheduleRequest){
+        String result = scheduleService.createSchedule(createScheduleRequest);
+        return ResponseEntity.ok(result);
     }
 }
