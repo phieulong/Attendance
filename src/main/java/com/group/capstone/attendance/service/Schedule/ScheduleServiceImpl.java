@@ -36,6 +36,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     private RoomRepository roomRepository;
     @Autowired
     private SubjectRepository subjectRepository;
+    @Autowired
+    private AttendanceRepository attendanceRepository;
 
     public List<StudentScheduleDetailDto> getScheduleByIdStudent (int student_id, String date){
         List<StudentScheduleDto> studentScheduleDtoList = scheduleRepository.getScheduleByIdStudent(student_id, date);
@@ -93,7 +95,20 @@ public class ScheduleServiceImpl implements ScheduleService {
         schedule.setUpdatedAt(date);
         schedule.setUpdatedBy(1);
         schedule.setStatus(true);
-        scheduleRepository.saveAndFlush(schedule);
+        Schedule s = scheduleRepository.save(schedule);
+        List<Registration> registrationList = classTerm.getAClass().getRegistrationList();
+        for(int i = 0; i < registrationList.size(); i++){
+            Attendance attendance = new Attendance();
+            attendance.setSchedule(s);
+            attendance.setRegistration(registrationList.get(i));
+            attendance.setPresent(false);
+            attendance.setCreatedAt(date);
+            attendance.setCreatedBy(1);
+            attendance.setUpdatedAt(date);
+            attendance.setUpdatedBy(1);
+            attendanceRepository.saveAndFlush(attendance);
+        }
+        scheduleRepository.flush();
         return "Success";
     }
 }

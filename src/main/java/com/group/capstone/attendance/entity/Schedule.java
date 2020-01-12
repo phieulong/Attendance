@@ -53,43 +53,45 @@ import java.util.List;
 
 
 @NamedNativeQuery(name = "findScheduleByTeacherId", resultSetMapping = "TeacherScheduleInfo",
-        query = "select sc.id as schedule_id, DATE_FORMAT(sc.date, '%d/%m/%Y') as date," +
-                " TIME_FORMAT(cg.time_start, '%H:%i:%s') as time_start , " +
-                "c.name as class_name, " +
-                "s.name as subject, r.name as room, \n" +
+        query = "select sc.id as schedule_id, date_format(sc.date, \"%d/%m/%Y\") as date,\n" +
+                "time_format(cg.time_start,\"%H:%i:%s\") as time_start, cl.name as class_name,\n" +
+                "s.name as subject, r.name as room,\n" +
                 "(select count(rgt.id)\n" +
                 "from registration rgt\n" +
-                "join class cl on rgt.class_id = cl.id\n" +
-                "where cl.id = c.id) as total,\n" +
+                "join class c on rgt.class_id = c.id\n" +
+                "where c.id = cl.id) as total,\n" +
                 "(select count(atd.id)\n" +
                 "from attendance atd\n" +
-                "where atd.schedule_id = sc.id and atd.is_present = 1) as total_attendance, sc.status\n" +
-                "from schedule sc\n" +
-                "Join user u on sc.user_id = u.id\n" +
-                "Join category cg on sc.category_id = cg.id\n" +
-                "Join subject s on sc.subject_id = s.id\n" +
-                "Join room r on sc.room_id = r.id\n" +
-                "Join class_term ct on sc.class_term_id = ct.id\n" +
-                "Join class c on ct.class_id = c.id\n" +
+                "where atd.schedule_id = sc.id and atd.is_present = 1) as total_attendance,\n" +
+                "sc.status\n" +
+                "from user u\n" +
+                "join schedule sc on sc.user_id = u.id\n" +
+                "join category cg on sc.category_id = cg.id\n" +
+                "join class_term ct on sc.class_term_id = ct.id\n" +
+                "join class cl on ct.class_id = cl.id\n" +
+                "join subject s on sc.subject_id = s.id\n" +
+                "join room r on sc.room_id = r.id\n" +
                 "where u.id = ?1 and sc.date = ?2")
 
 @NamedNativeQuery(name = "findScheduleByStudentId", resultSetMapping = "UserScheduleInfo",
-        query = "select sc.id,\n" +
-                "(select concat(u.last_name,\" \",u.first_name)\n" +
-                "from user where user.id = sc.user_id) as teacher,\n" +
-                "s.name as subject, cl.name as class, DATE_FORMAT(sc.date, '%d/%m/%Y') as date," +
-                " TIME_FORMAT(cg.time_start, '%H:%i:%s') as time_start," +
-                " r.name as room,\n" +
-                " a.is_present as present, sc.status\n" +
-                "From user u\n" +
-                "Join registration rg on u.id = rg.user_id\n" +
-                "Join class cl on rg.class_id = cl.id\n" +
-                "Join class_term ct on cl.id = ct.class_id\n" +
-                "Join schedule sc on ct.id = sc.class_term_id\n" +
-                "Join category cg on sc.category_id = cg.id\n" +
-                "Join subject s on sc.subject_id = s.id\n" +
-                "Join room r on sc.room_id = r.id\n" +
-                "Join attendance a on a.schedule_id = sc.id and a.registration_id = rg.id\n" +
+        query = "select sc.id, \n" +
+                "date_format(sc.date, '%d/%m/%Y') as date, \n" +
+                "time_format(cg.time_start, '%H:%i:%s') as time_start, \n" +
+                "(select concat(ur.last_name,\" \",ur.first_name)\n" +
+                "from user ur\n" +
+                "where ur.id = sc.user_id) as teacher, \n" +
+                "s.name as subject,cl.name as class,\n" +
+                "r.name as room, atd.is_present as present, sc.status\n" +
+                "from user u\n" +
+                "join registration rg on rg.user_id = u.id\n" +
+                "join class cl on rg.class_id = cl.id\n" +
+                "join class_term ct on ct.class_id = cl.id\n" +
+                "join term t on ct.term_id = t.id\n" +
+                "join schedule sc on sc.class_term_id = ct.id\n" +
+                "join category cg on sc.category_id = cg.id\n" +
+                "join subject s on sc.subject_id = s.id\n" +
+                "join room r on sc.room_id = r.id\n" +
+                "join attendance atd on atd.registration_id = rg.id and atd.schedule_id = sc.id\n" +
                 "where u.id = ?1 and sc.date = ?2")
 @Getter
 @Setter
