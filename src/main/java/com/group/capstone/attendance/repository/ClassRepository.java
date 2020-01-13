@@ -18,4 +18,17 @@ public interface ClassRepository extends JpaRepository<Class, Integer> {
                                         "from class\n" +
                                         "where status = 1 and id = ?1")
     public Class findById(int id);
+
+    @Query(nativeQuery = true, value = "select cl.name\n" +
+                                        "from user u\n" +
+                                        "join registration rg on rg.user_id = u.id\n" +
+                                        "join class cl on rg.class_id = cl.id\n" +
+                                        "where u.id = ?1")
+    public String findByStudentId(int id);
+
+    @Query(nativeQuery = true, value = "select cl.name\n" +
+                                        "from user u\n" +
+                                        "join class cl on cl.user_id = u.id\n" +
+                                        "where u.id = ?1")
+    public String findByTeacherId(int id);
 }

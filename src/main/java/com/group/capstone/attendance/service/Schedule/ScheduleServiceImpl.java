@@ -12,6 +12,7 @@ import com.group.capstone.attendance.service.ClassTerm.ClassTermService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,17 +59,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<TeacherScheduleDto> getScheduleByIdTeacher (int teacher_id, String date){
         return scheduleRepository.getScheduleByIdTeacher(teacher_id, date);
     }
-
+    @Transactional
     public String createSchedule(CreateScheduleRequest createScheduleRequest){
-        ClassTerm classTerm = new ClassTerm();
-        classTerm = classTermRepository.getClassTermIdByClassIdAndTermId
+        ClassTerm classTerm = classTermRepository.getClassTermIdByClassIdAndTermId
                 (createScheduleRequest.getClassId(), createScheduleRequest.getTermId());
         if (classTerm == null){
+            classTerm = new ClassTerm();
             Class aClass = classRepository.findById(createScheduleRequest.getClassId());
-            System.out.println(aClass.getId());
             Term term = termRepository.findById(createScheduleRequest.getTermId());
-            System.out.println(term.getId());
-            System.out.println(aClass.toString());
             classTerm.setAClass(aClass);
             classTerm.setTerm(term);
             Date date = new Date();

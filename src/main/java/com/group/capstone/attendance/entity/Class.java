@@ -30,6 +30,7 @@ import java.util.List;
                 "from class cl\n" +
                 "join user u on cl.user_id = u.id\n" +
                 "where cl.status = 1")
+
 @Getter
 @Setter
 @AllArgsConstructor
