@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    public UserInfo createUser(CreateUserRequest createUserRequest);
+    public UserInfo createUser(int Teacher_id, CreateUserRequest createUserRequest);
 
     public UserLoginInfoDto getUserLoginInfoByAccount(String account);
 

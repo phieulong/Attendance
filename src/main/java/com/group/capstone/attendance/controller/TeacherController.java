@@ -24,6 +24,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -50,36 +52,40 @@ public class TeacherController {
     @Autowired
     private CategoryService categoryService;
 
-    @ApiOperation(value="Get a schedule by teacher_id", response = TeacherScheduleDto.class)
+    @ApiOperation(value="Get a schedule list by teacher_id", response = TeacherScheduleDto.class)
     @ApiResponses({
             @ApiResponse(code = 404, message="Record not found"),
             @ApiResponse(code = 500, message="Error Server"),
     })
-    @GetMapping("/schedule/{id}")
-    public ResponseEntity<?> getScheduleByIdTeacher(@PathVariable int id, String date) {
+    @GetMapping("/schedule/")
+    public ResponseEntity<?> getScheduleByIdTeacher(String date) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        int id = (Integer)authentication.getCredentials();
         List<TeacherScheduleDto> teacherScheduleDtoList = scheduleService.getScheduleByIdTeacher(id, date);
         return ResponseEntity.ok(teacherScheduleDtoList);
     }
-    @ApiOperation(value = "Get a schedule by student_id", response = UserInfo.class)
+    @ApiOperation(value = "Get a teacher info", response = UserInfo.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),
             @ApiResponse(code = 500, message = "Error Server"),
     })
 
-    @GetMapping("/info/{id}")
-    public ResponseEntity<?> getStudentInfo(@PathVariable int id) {
+    @GetMapping("/info/")
+    public ResponseEntity<?> getTeacherInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        int id = (Integer)authentication.getCredentials();
         UserInfo userInfo = userService.getTeacherInfo(id);
         return ResponseEntity.ok(userInfo);
     }
 
-    @ApiOperation(value = "Get a schedule by student_id", response = TeacherAttendanceInfo.class)
+    @ApiOperation(value = "Get a attendance list by teacher", response = TeacherAttendanceInfo.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),
             @ApiResponse(code = 500, message = "Error Server"),
     })
-    @GetMapping("/attendance/{id}")
-    public ResponseEntity<?> getAttendanceList(@PathVariable int id) {
-        List<TeacherAttendanceInfo> teacherAttendanceInfoList = attendanceService.getAttendanceListByScheduleId(id);
+    @GetMapping("/attendance/{schedule_id}")
+    public ResponseEntity<?> getAttendanceList(@PathVariable int schedule_id) {
+        List<TeacherAttendanceInfo> teacherAttendanceInfoList = attendanceService.getAttendanceListByScheduleId(schedule_id);
         return ResponseEntity.ok(teacherAttendanceInfoList);
     }
 
@@ -149,36 +155,46 @@ public class TeacherController {
         return ResponseEntity.ok(categoryInfoDtoList);
     }
 
+    //Controller tạo mới thời khóa biểu
+    //Gọi đến schedule service
     @ApiOperation(value="Create a schedule", response = CreateScheduleRequest.class)
     @ApiResponses({
-            @ApiResponse(code = 400, message="Da ton tai schedule nay"),
-            @ApiResponse(code = 500, message="Server bi loi"),
+            @ApiResponse(code = 400, message="Can not insert the data, this record is exist in database"),
+            @ApiResponse(code = 500, message="Server is getting in troubles"),
     })
-    @PostMapping("")
+    @PostMapping("/createSchedule")
     public ResponseEntity<?> createSchedule(@RequestBody @Valid CreateScheduleRequest createScheduleRequest){
-        String result = scheduleService.createSchedule(createScheduleRequest);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        int id = (Integer)authentication.getCredentials();
+        String result = scheduleService.createSchedule(id, createScheduleRequest);
         return ResponseEntity.ok(result);
     }
 
+    //Controller thêm mới sinh viên
+    //Gọi đến user service
     @ApiOperation(value="Create a user", response = CreateUserRequest.class)
     @ApiResponses({
-            @ApiResponse(code = 400, message="Da ton tai schedule nay"),
-            @ApiResponse(code = 500, message="Server bi loi"),
+            @ApiResponse(code = 400, message="Can not insert the data, this record is exist in database"),
+            @ApiResponse(code = 500, message="Server is getting in troubles"),
     })
     @PostMapping("/createUser")
-    public ResponseEntity<?> createSchedule(@RequestBody @Valid CreateUserRequest createUserRequest){
-        UserInfo userInfo = userService.createUser(createUserRequest);
+    public ResponseEntity<?> createUser(@RequestBody @Valid CreateUserRequest createUserRequest){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        int id = (Integer)authentication.getCredentials();
+        UserInfo userInfo = userService.createUser(id, createUserRequest);
         return ResponseEntity.ok(userInfo);
     }
 
-    @ApiOperation(value="attendance by a teacher", response = String.class)
+    @ApiOperation(value="Take attendance by a teacher", response = String.class)
     @ApiResponses({
             @ApiResponse(code = 404, message="Record not found"),
             @ApiResponse(code = 500, message="Error Server"),
     })
     @PutMapping("/take-attendance/{id}")
     public ResponseEntity<?> setAttendanceBySt(@PathVariable int id, int scheduleId, boolean isPresent) {
-        String result = attendanceService.setAttendanceByTeacher(id,scheduleId, isPresent);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        int teacher_id = (Integer)authentication.getCredentials();
+        String result = attendanceService.setAttendanceByTeacher(teacher_id, id,scheduleId, isPresent);
         return ResponseEntity.ok(result);
     }
 }

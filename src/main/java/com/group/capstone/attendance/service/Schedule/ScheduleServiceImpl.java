@@ -1,13 +1,17 @@
 package com.group.capstone.attendance.service.Schedule;
 
+import com.group.capstone.attendance.Common.ErrorMessage;
 import com.group.capstone.attendance.entity.*;
 import com.group.capstone.attendance.entity.Class;
+import com.group.capstone.attendance.exception.BadRequest;
+import com.group.capstone.attendance.exception.ErrorServerException;
 import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDetailDto;
 import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDto;
 import com.group.capstone.attendance.model.Schedule.dto.TeacherScheduleDto;
 import com.group.capstone.attendance.model.Schedule.mapper.ScheduleMapper;
 import com.group.capstone.attendance.model.Schedule.request.CreateScheduleRequest;
 import com.group.capstone.attendance.repository.*;
+import com.group.capstone.attendance.service.Attendance.AttendanceService;
 import com.group.capstone.attendance.service.ClassTerm.ClassTermService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,7 +42,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     private SubjectRepository subjectRepository;
     @Autowired
-    private AttendanceRepository attendanceRepository;
+    private AttendanceService attendanceService;
 
     public List<StudentScheduleDetailDto> getScheduleByIdStudent (int student_id, String date){
         List<StudentScheduleDto> studentScheduleDtoList = scheduleRepository.getScheduleByIdStudent(student_id, date);
@@ -57,54 +61,77 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<TeacherScheduleDto> getScheduleByIdTeacher (int teacher_id, String date){
         return scheduleRepository.getScheduleByIdTeacher(teacher_id, date);
     }
+
+    //Service tạo thời khóa biểu
+    //Id người tạo thời khóa biểu được lấy từ token
+    //Thông tin thời khóa biểu truyền lên từ client
+    //Sử dụng transaction khi xảy ra lỗi trong quá trình query vào database
     @Transactional
-    public String createSchedule(CreateScheduleRequest createScheduleRequest){
-        ClassTerm classTerm = classTermRepository.getClassTermIdByClassIdAndTermId
+    public String createSchedule(int Teacher_id, CreateScheduleRequest createScheduleRequest){
+        ClassTerm classTerm;
+        try{
+            classTerm = classTermRepository.getClassTermIdByClassIdAndTermId
                 (createScheduleRequest.getClassId(), createScheduleRequest.getTermId());
+        }catch (Exception ex){
+            throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
+        }
+        Date date = new Date();
+        //nếu thông tin lớp học chưa có trong kì học người dùng yêu cầu, thì phải đăng kí mới
         if (classTerm == null){
             classTerm = new ClassTerm();
-            Class aClass = classRepository.findById(createScheduleRequest.getClassId());
-            Term term = termRepository.findById(createScheduleRequest.getTermId());
-            classTerm.setAClass(aClass);
-            classTerm.setTerm(term);
-            Date date = new Date();
-            classTerm.setCreatedAt(date);
-            classTerm.setCreatedBy(1);
-            classTerm.setUpdatedAt(date);
-            classTerm.setUpdatedBy(1);
-            classTerm = classTermService.createClassTerm(classTerm);
+            Class aClass;
+            Term term;
+            try {
+                aClass = classRepository.findById(createScheduleRequest.getClassId());
+                term = termRepository.findById(createScheduleRequest.getTermId());
+            }catch (Exception ex){
+                throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
+            }
+            classTerm = classTermService.createClassTerm(Teacher_id, aClass, term);
+        }else{
+            List<Schedule> scheduleList = scheduleRepository.checkDuplicate
+                    (classTerm.getId(), createScheduleRequest.getDate().toString(), createScheduleRequest.getCategoryId());
+            if(!scheduleList.isEmpty())
+                throw new BadRequest(ErrorMessage.DUPLICATE_RECORD);
         }
         Schedule schedule = new Schedule();
         schedule.setDate(createScheduleRequest.getDate());
-        Category category = categoryRepository.findById(createScheduleRequest.getCategoryId());
+        Category category;
+        Room room;
+        Subject subject;
+        User user;
+        try {
+            category = categoryRepository.findById(createScheduleRequest.getCategoryId());
+            room = roomRepository.findById(createScheduleRequest.getRoomId());
+            subject = subjectRepository.findById(createScheduleRequest.getSubjectId());
+            user = userRepository.findById(createScheduleRequest.getSubTrainerId());
+        }catch (Exception ex){
+            throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
+        }
         schedule.setCategory(category);
         schedule.setClassTerm(classTerm);
-        Room room = roomRepository.findById(createScheduleRequest.getRoomId());
         schedule.setRoom(room);
-        Subject subject = subjectRepository.findById(createScheduleRequest.getSubjectId());
         schedule.setSubject(subject);
-        User user = userRepository.findById(createScheduleRequest.getSubTrainerId());
         schedule.setSubTrainer(user);
-        Date date = new Date();
         schedule.setCreatedAt(date);
-        schedule.setCreatedBy(1);
+        schedule.setCreatedBy(Teacher_id);
         schedule.setUpdatedAt(date);
-        schedule.setUpdatedBy(1);
+        schedule.setUpdatedBy(Teacher_id);
         schedule.setStatus(true);
-        Schedule s = scheduleRepository.save(schedule);
+        Schedule sc;
+        try {
+            sc = scheduleRepository.saveAndFlush(schedule);
+        }catch (Exception ex){
+            throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
+        }
+        //Tạo danh sách điểm danh sau khi thêm thành công thời khóa biểu
         List<Registration> registrationList = classTerm.getAClass().getRegistrationList();
         for(int i = 0; i < registrationList.size(); i++){
-            Attendance attendance = new Attendance();
-            attendance.setSchedule(s);
-            attendance.setRegistration(registrationList.get(i));
-            attendance.setPresent(false);
-            attendance.setCreatedAt(date);
-            attendance.setCreatedBy(1);
-            attendance.setUpdatedAt(date);
-            attendance.setUpdatedBy(1);
-            attendanceRepository.saveAndFlush(attendance);
+            System.out.println(Teacher_id);
+            System.out.println(registrationList.get(i).getId());
+            System.out.println(sc.getId());
+            attendanceService.createAttendance(Teacher_id, registrationList.get(i), sc);
         }
-        scheduleRepository.flush();
         return "Success";
     }
 }

@@ -1,5 +1,6 @@
 package com.group.capstone.attendance.controller;
 
+import com.group.capstone.attendance.Common.ErrorMessage;
 import com.group.capstone.attendance.model.User.dto.UserLoginInfoDetailDto;
 import com.group.capstone.attendance.model.User.request.UserLoginRequest;
 import com.group.capstone.attendance.service.User.UserService;
@@ -19,14 +20,14 @@ import javax.validation.Valid;
 public class LoginController {
     @Autowired
     private UserService userService;
-
-    @ApiOperation(value="Login api", response = UserLoginInfoDetailDto.class)
+    //Controller login gọi đến user service kiểm tra thông tin đăng nhập và trả về kết quả
+    @ApiOperation(value="Login Api", response = UserLoginInfoDetailDto.class)
     @ApiResponses({
-            @ApiResponse(code = 400, message="Da ton tai user nay"),
-            @ApiResponse(code = 500, message="Server bi loi"),
+            @ApiResponse(code = 404, message= "The record not found"),
+            @ApiResponse(code = 500, message="Server is getting in troubles"),
     })
     @PostMapping("")
-    public ResponseEntity<?> createUser(@RequestBody @Valid UserLoginRequest userLoginRequest){
+    public ResponseEntity<?> Login(@RequestBody @Valid UserLoginRequest userLoginRequest){
         UserLoginInfoDetailDto userLoginInfoDetailDto =
                 userService.login(userLoginRequest.getAccount(), userLoginRequest.getPassword());
         return ResponseEntity.ok(userLoginInfoDetailDto);

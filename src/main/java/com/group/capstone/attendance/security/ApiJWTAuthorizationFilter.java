@@ -42,6 +42,7 @@ public class ApiJWTAuthorizationFilter extends BasicAuthenticationFilter {
         String user = claims.getSubject();
         // Lấy thông tin role
         ArrayList<String> roles = (ArrayList<String>) claims.get("roles");
+        int user_id = (Integer)claims.get("user_id");
         // Convert mảng role thành mảng GrantedAuthority để authentication manager kiểm tra
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
         if (roles != null) {
@@ -52,7 +53,7 @@ public class ApiJWTAuthorizationFilter extends BasicAuthenticationFilter {
         }
         if (user != null) {
             // Trả về đối tượng Authentication chứa thông tin username, thông tin đăng nhập (cấu trúc struct tùy bạn, hiện tại đang để rỗng), tập quyền
-            return new UsernamePasswordAuthenticationToken(user, null, authorities);
+            return new UsernamePasswordAuthenticationToken(user, user_id, authorities);
         }
         return null;
     }

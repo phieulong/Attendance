@@ -21,7 +21,7 @@ import java.util.Date;
                                 @ColumnResult(name = "student_id", type = Integer.class),
                                 @ColumnResult(name = "name", type = String.class),
                                 @ColumnResult(name = "avatar", type = String.class),
-                                @ColumnResult(name = "is_present", type = Boolean.class),
+                                @ColumnResult(name = "is_present", type = Integer.class),
                         }
                 )
         )
@@ -30,12 +30,12 @@ import java.util.Date;
 @NamedNativeQuery(name = "getAttendanceByScheduleId", resultSetMapping = "TeacherAttendanceInfo",
         query = "select u.id as student_id,\n" +
                 "concat(u.last_name,\" \",u.first_name) as name,\n" +
-                "u.picture as avatar, atd.is_present\n" +
+                "u.picture as avatar, if (atd.is_present = true, 1, 0) as is_present\n" +
                 "from schedule sc\n" +
                 "Join attendance atd on atd.schedule_id = sc.id\n" +
                 "Join registration rg on atd.registration_id = rg.id\n" +
                 "Join user u on rg.user_id = u.id\n" +
-                "Where sc.id = 1")
+                "Where sc.id = ?1")
 @Getter
 @Setter
 @AllArgsConstructor

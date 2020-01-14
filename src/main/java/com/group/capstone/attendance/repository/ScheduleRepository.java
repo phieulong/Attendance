@@ -16,4 +16,16 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     @Query(nativeQuery = true, name = "findScheduleByTeacherId")
     public List<TeacherScheduleDto> getScheduleByIdTeacher(int teacher_id, String date);
+
+    @Query(nativeQuery = true, value = "SELECT * \n" +
+            "from schedule sc\n" +
+            "where sc.class_term_id = ?1 and sc.date = ?2 and sc.category_id = ?3")
+    public List<Schedule> checkDuplicate(int ct_id, String date, int cg_id);
+
+    @Query(nativeQuery = true, value = "select *\n" +
+                                        "from schedule sc\n" +
+                                        "join class_term ct on ct.id = sc.class_term_id\n" +
+                                        "join class cl on cl.id = ct.class_id\n" +
+                                        "where cl.id = ?1")
+    public List<Schedule> getAllByClassId(int class_id);
 }

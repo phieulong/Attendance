@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,35 +29,43 @@ public class StudentController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "Get a schedule by student_id", response = StudentScheduleDto.class)
+    //Controller gọi đến schedule service để lấy thông tin thời khóa biểu
+    //Ngày lấy thời khóa biểu được truyền vào từ client, id học sinh lấy từ token
+    @ApiOperation(value = "Get a schedule by student", response = StudentScheduleDto.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),
             @ApiResponse(code = 500, message = "Error Server"),
     })
-    @GetMapping("/schedule/{id}")
-    public ResponseEntity<?> getScheduleByIdStudent(@PathVariable int id, String date) {
+    @GetMapping("/schedule/")
+    public ResponseEntity<?> getScheduleByIdStudent(String date) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        int id = (Integer)authentication.getCredentials();
         List<StudentScheduleDetailDto> studentScheduleDetailDtoList = scheduleService.getScheduleByIdStudent(id, date);
         return ResponseEntity.ok(studentScheduleDetailDtoList);
     }
 
-    @ApiOperation(value="attendance by a student", response = String.class)
+    @ApiOperation(value="Take attendance by a student", response = String.class)
     @ApiResponses({
             @ApiResponse(code = 404, message="Record not found"),
             @ApiResponse(code = 500, message="Error Server"),
     })
-    @PutMapping("/attendance/{id}")
-    public ResponseEntity<?> setAttendanceBySt(@PathVariable int id, int schedule_id) {
+    @PutMapping("/attendance/{schedule_id}")
+    public ResponseEntity<?> setAttendanceBySt(@PathVariable int schedule_id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        int id = (Integer)authentication.getCredentials();
         String result = attendanceService.setAttendanceByStudent(id,schedule_id);
         return ResponseEntity.ok(result);
     }
 
-    @ApiOperation(value = "Get a schedule by student_id", response = UserInfo.class)
+    @ApiOperation(value = "Get a student info", response = UserInfo.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),
             @ApiResponse(code = 500, message = "Error Server"),
     })
-    @GetMapping("/info/{id}")
-    public ResponseEntity<?> getStudentInfo(@PathVariable int id) {
+    @GetMapping("/info")
+    public ResponseEntity<?> getStudentInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        int id = (Integer)authentication.getCredentials();
         UserInfo userInfo = userService.getStudentInfo(id);
         return ResponseEntity.ok(userInfo);
     }

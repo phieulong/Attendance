@@ -13,5 +13,5 @@ public interface ScheduleService {
 
     public List<TeacherScheduleDto> getScheduleByIdTeacher (int teacher_id, String date);
 
-    public String createSchedule(CreateScheduleRequest createScheduleRequest);
+    public String createSchedule(int Teacher_id, CreateScheduleRequest createScheduleRequest);
 }

@@ -23,4 +23,9 @@ public interface AttendanceRepository  extends JpaRepository<Attendance, Integer
     @Query(nativeQuery = true, name = "getAttendanceByScheduleId")
     public List<TeacherAttendanceInfo> getAttendanceListByScheduleId(int schedule_id);
 
+    @Query(nativeQuery = true, value = "select *\n" +
+                                        "from attendance atd\n" +
+                                        "where atd.schedule_id = ?1 and atd.registration_id = ?2")
+    public Attendance findByScheduleAndRegistration(int schedule_id, int registration_id);
+
 }

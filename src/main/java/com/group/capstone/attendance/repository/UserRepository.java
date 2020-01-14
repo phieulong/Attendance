@@ -21,6 +21,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     public User findByAccount(String account);
 
+    public User findByEmail(String email);
+
     @Query(nativeQuery = true, value = "Select r.name\n" +
                                         "From user u\n" +
                                         "Join user_role ur on u.id = ur.user_id\n" +

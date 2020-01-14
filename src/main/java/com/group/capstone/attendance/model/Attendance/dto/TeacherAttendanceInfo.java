@@ -13,5 +13,5 @@ public class TeacherAttendanceInfo {
     private int student_id;
     private String name;
     private String avatar;
-    private Boolean is_present;
+    private int is_present;
 }
