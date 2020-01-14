@@ -5,6 +5,7 @@ import com.group.capstone.attendance.model.User.dto.UserInfo;
 import com.group.capstone.attendance.model.User.dto.UserLoginInfoDetailDto;
 import com.group.capstone.attendance.model.User.dto.UserLoginInfoDto;
 import com.group.capstone.attendance.model.User.request.CreateUserRequest;
+import com.group.capstone.attendance.model.User.request.UpdateUserRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

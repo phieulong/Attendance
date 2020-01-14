@@ -24,6 +24,17 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
     }
 
+    public String setAttendanceByTeacher(int Student_id, int Schedule_id, boolean is_present){
+        Attendance attendance = attendanceRepository.findByRegistrationAndSchedule(Student_id, Schedule_id);
+        attendance.setPresent(is_present);
+        try{
+            attendanceRepository.saveAndFlush(attendance);
+            return "success";
+        }catch (Exception ex){
+            return "failed";
+        }
+    }
+
     public List<TeacherAttendanceInfo> getAttendanceListByScheduleId(int schedule_id){
         return attendanceRepository.getAttendanceListByScheduleId(schedule_id);
     }

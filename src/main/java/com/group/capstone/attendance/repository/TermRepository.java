@@ -4,11 +4,11 @@ import com.group.capstone.attendance.entity.Term;
 import com.group.capstone.attendance.model.Term.dto.TermDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Service
+@Repository
 public interface TermRepository extends JpaRepository<Term, Integer> {
     @Query(nativeQuery = true, name = "getAllTermInfo")
     public List<TermDto> getAllTermInfo();

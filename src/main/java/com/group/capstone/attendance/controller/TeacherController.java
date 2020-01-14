@@ -170,4 +170,15 @@ public class TeacherController {
         UserInfo userInfo = userService.createUser(createUserRequest);
         return ResponseEntity.ok(userInfo);
     }
+
+    @ApiOperation(value="attendance by a teacher", response = String.class)
+    @ApiResponses({
+            @ApiResponse(code = 404, message="Record not found"),
+            @ApiResponse(code = 500, message="Error Server"),
+    })
+    @PutMapping("/attendance/{id}")
+    public ResponseEntity<?> setAttendanceBySt(@PathVariable int id, int schedule_id, boolean is_present) {
+        String result = attendanceService.setAttendanceByTeacher(id,schedule_id, is_present);
+        return ResponseEntity.ok(result);
+    }
 }

@@ -1,18 +1,15 @@
 package com.group.capstone.attendance.service.User;
 
+import com.group.capstone.attendance.entity.*;
 import com.group.capstone.attendance.entity.Class;
-import com.group.capstone.attendance.entity.Registration;
-import com.group.capstone.attendance.entity.User;
 import com.group.capstone.attendance.model.User.dto.UserInfo;
 import com.group.capstone.attendance.model.User.dto.UserLoginInfoDetailDto;
 import com.group.capstone.attendance.model.User.dto.UserLoginInfoDto;
 import com.group.capstone.attendance.model.User.mapper.UserLoginInfoDetailMapper;
 import com.group.capstone.attendance.model.User.mapper.UserLoginInfoMapper;
 import com.group.capstone.attendance.model.User.request.CreateUserRequest;
-import com.group.capstone.attendance.repository.ClassRepository;
-import com.group.capstone.attendance.repository.RegistrationRepository;
-import com.group.capstone.attendance.repository.RoleRepository;
-import com.group.capstone.attendance.repository.UserRepository;
+import com.group.capstone.attendance.model.User.request.UpdateUserRequest;
+import com.group.capstone.attendance.repository.*;
 import com.group.capstone.attendance.util.JwtUltis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +28,8 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     @Autowired
     private RegistrationRepository registrationRepository;
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     @Transactional
     public UserInfo createUser(CreateUserRequest createUserRequest){
@@ -50,8 +49,8 @@ public class UserServiceImpl implements UserService {
         user.setStatus(true);
         user = userRepository.saveAndFlush(user);
         userInfo.setClass_name("");
-        String role_name = roleRepository.findById(createUserRequest.getRole_id()).getName();
-        if(role_name.equals("ROLE_STUDENT")){
+        Role role = roleRepository.findById(createUserRequest.getRole_id());
+        if(role.getName().equals("ROLE_STUDENT")){
             Registration registration = new Registration();
             Class aClass = classRepository.findById(createUserRequest.getClass_id());
             registration.setAClass(aClass);
@@ -64,6 +63,14 @@ public class UserServiceImpl implements UserService {
             registrationRepository.saveAndFlush(registration);
             userInfo.setClass_name(aClass.getName());
         }
+        UserRole userRole = new UserRole();
+        userRole.setUser(user);
+        userRole.setRole(role);
+        userRole.setCreatedAt(date);
+        userRole.setCreatedBy(1);
+        userRole.setUpdatedAt(date);
+        userRole.setUpdatedBy(1);
+        userRoleRepository.saveAndFlush(userRole);
         userInfo.setId(user.getId());
         userInfo.setAccount(user.getAccount());
         userInfo.setEmail(createUserRequest.getEmail());
@@ -71,6 +78,8 @@ public class UserServiceImpl implements UserService {
         userInfo.setAvatar_link(createUserRequest.getPicture());
         return userInfo;
     }
+
+
 
     public UserLoginInfoDto getUserLoginInfoByAccount(String account){
         User user = userRepository.findByAccount(account);
