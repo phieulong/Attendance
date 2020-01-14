@@ -42,18 +42,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     public List<StudentScheduleDetailDto> getScheduleByIdStudent (int student_id, String date){
         List<StudentScheduleDto> studentScheduleDtoList = scheduleRepository.getScheduleByIdStudent(student_id, date);
+        List<StudentScheduleDetailDto> studentScheduleDetailDtoList = new ArrayList<>();
         if(!studentScheduleDtoList.isEmpty()){
-            List<StudentScheduleDetailDto> studentScheduleDetailDtoList = new ArrayList<>();
             List<String> avatar_5_friends;
             for(StudentScheduleDto std : studentScheduleDtoList){
-                System.out.println(std.getSchedule_id());
                 avatar_5_friends = userRepository.getUserPictureByScheduleId(std.getSchedule_id());
                 System.out.println(avatar_5_friends);
                 studentScheduleDetailDtoList.add(ScheduleMapper.toStudentScheduleDetailDto(std,avatar_5_friends));
             }
-            return studentScheduleDetailDtoList;
         }
-        return null;
+        return studentScheduleDetailDtoList;
     }
 
     public List<TeacherScheduleDto> getScheduleByIdTeacher (int teacher_id, String date){

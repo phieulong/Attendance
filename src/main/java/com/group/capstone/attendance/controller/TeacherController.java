@@ -9,6 +9,7 @@ import com.group.capstone.attendance.model.Schedule.request.CreateScheduleReques
 import com.group.capstone.attendance.model.Subject.dto.SubjectDto;
 import com.group.capstone.attendance.model.Term.dto.TermDto;
 import com.group.capstone.attendance.model.User.dto.UserInfo;
+import com.group.capstone.attendance.model.User.request.CreateUserRequest;
 import com.group.capstone.attendance.service.Attendance.AttendanceService;
 import com.group.capstone.attendance.service.Category.CategoryService;
 import com.group.capstone.attendance.service.Class.ClassService;
@@ -157,5 +158,16 @@ public class TeacherController {
     public ResponseEntity<?> createSchedule(@RequestBody @Valid CreateScheduleRequest createScheduleRequest){
         String result = scheduleService.createSchedule(createScheduleRequest);
         return ResponseEntity.ok(result);
+    }
+
+    @ApiOperation(value="Create a user", response = CreateUserRequest.class)
+    @ApiResponses({
+            @ApiResponse(code = 400, message="Da ton tai schedule nay"),
+            @ApiResponse(code = 500, message="Server bi loi"),
+    })
+    @PostMapping("/createUser")
+    public ResponseEntity<?> createSchedule(@RequestBody @Valid CreateUserRequest createUserRequest){
+        UserInfo userInfo = userService.createUser(createUserRequest);
+        return ResponseEntity.ok(userInfo);
     }
 }
