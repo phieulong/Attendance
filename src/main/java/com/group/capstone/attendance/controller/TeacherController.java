@@ -176,9 +176,9 @@ public class TeacherController {
             @ApiResponse(code = 404, message="Record not found"),
             @ApiResponse(code = 500, message="Error Server"),
     })
-    @PutMapping("/attendance/{id}")
-    public ResponseEntity<?> setAttendanceBySt(@PathVariable int id, int schedule_id, boolean is_present) {
-        String result = attendanceService.setAttendanceByTeacher(id,schedule_id, is_present);
+    @PutMapping("/take-attendance/{id}")
+    public ResponseEntity<?> setAttendanceBySt(@PathVariable int id, int scheduleId, boolean isPresent) {
+        String result = attendanceService.setAttendanceByTeacher(id,scheduleId, isPresent);
         return ResponseEntity.ok(result);
     }
 }

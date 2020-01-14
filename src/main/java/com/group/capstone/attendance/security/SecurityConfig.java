@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/teacher/getAllCategoryInfo").permitAll()
                 .antMatchers("/api/teacher").permitAll()
                 .antMatchers("/api/teacher/createUser").permitAll()
-                .antMatchers("/api/teacher/attendance/{id}").permitAll()
+                .antMatchers("/api/teacher/take-attendance/{id}").permitAll()
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/api/test-security/profile").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
