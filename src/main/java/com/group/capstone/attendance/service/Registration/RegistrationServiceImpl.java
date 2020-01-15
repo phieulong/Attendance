@@ -1,6 +1,6 @@
 package com.group.capstone.attendance.service.Registration;
 
-import com.group.capstone.attendance.Common.ErrorMessage;
+import com.group.capstone.attendance.common.ErrorMessage;
 import com.group.capstone.attendance.entity.Class;
 import com.group.capstone.attendance.entity.Registration;
 import com.group.capstone.attendance.entity.User;

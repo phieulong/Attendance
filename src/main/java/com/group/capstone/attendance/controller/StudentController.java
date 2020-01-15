@@ -40,7 +40,7 @@ public class StudentController {
     public ResponseEntity<?> getScheduleByIdStudent(String date) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         int id = (Integer)authentication.getCredentials();
-        List<StudentScheduleDetailDto> studentScheduleDetailDtoList = scheduleService.getScheduleByIdStudent(id, date);
+        List<StudentScheduleDetailDto> studentScheduleDetailDtoList = scheduleService.getScheduleByStudentId(id, date);
         return ResponseEntity.ok(studentScheduleDetailDtoList);
     }
 

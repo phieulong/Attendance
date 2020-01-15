@@ -1,10 +1,11 @@
 package com.group.capstone.attendance.service.Schedule;
 
-import com.group.capstone.attendance.Common.ErrorMessage;
+import com.group.capstone.attendance.common.ErrorMessage;
 import com.group.capstone.attendance.entity.*;
 import com.group.capstone.attendance.entity.Class;
 import com.group.capstone.attendance.exception.BadRequest;
 import com.group.capstone.attendance.exception.ErrorServerException;
+import com.group.capstone.attendance.exception.RecordNotFoundException;
 import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDetailDto;
 import com.group.capstone.attendance.model.Schedule.dto.StudentScheduleDto;
 import com.group.capstone.attendance.model.Schedule.dto.TeacherScheduleDto;
@@ -44,22 +45,38 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     private AttendanceService attendanceService;
 
-    public List<StudentScheduleDetailDto> getScheduleByIdStudent (int student_id, String date){
-        List<StudentScheduleDto> studentScheduleDtoList = scheduleRepository.getScheduleByIdStudent(student_id, date);
-        List<StudentScheduleDetailDto> studentScheduleDetailDtoList = new ArrayList<>();
-        if(!studentScheduleDtoList.isEmpty()){
+    //Service get tất cả thông tin buổi học trong ngày của sinh viên được gửi từ client
+    //student_id được lấy từ token
+    public List<StudentScheduleDetailDto> getScheduleByStudentId (int student_id, String date){
+        List<StudentScheduleDto> studentScheduleDtoList;
+        try {
+            studentScheduleDtoList = scheduleRepository.getScheduleByIdStudent(student_id, date);
+            if(studentScheduleDtoList.isEmpty())
+                throw new RecordNotFoundException(ErrorMessage.NOT_FOUND);
+            List<StudentScheduleDetailDto> studentScheduleDetailDtoList = new ArrayList<>();
             List<String> avatar_5_friends;
             for(StudentScheduleDto std : studentScheduleDtoList){
                 avatar_5_friends = userRepository.getUserPictureByScheduleId(std.getSchedule_id());
                 System.out.println(avatar_5_friends);
                 studentScheduleDetailDtoList.add(ScheduleMapper.toStudentScheduleDetailDto(std,avatar_5_friends));
             }
-        }
         return studentScheduleDetailDtoList;
+        }catch (Exception ex){
+            throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
+        }
     }
 
-    public List<TeacherScheduleDto> getScheduleByIdTeacher (int teacher_id, String date){
-        return scheduleRepository.getScheduleByIdTeacher(teacher_id, date);
+    //Service get tất cả thông tin buổi học trong ngày của giáo viên được gửi từ client
+    //teacher_id được lấy từ token
+    public List<TeacherScheduleDto> getScheduleByTeacherId (int teacher_id, String date){
+        try {
+            List<TeacherScheduleDto> teacherScheduleDtoList = scheduleRepository.getScheduleByIdTeacher(teacher_id, date);
+            if (teacherScheduleDtoList.isEmpty())
+                throw new RecordNotFoundException(ErrorMessage.NOT_FOUND);
+            return teacherScheduleDtoList;
+        }catch (Exception ex){
+            throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
+        }
     }
 
     //Service tạo thời khóa biểu
@@ -78,7 +95,6 @@ public class ScheduleServiceImpl implements ScheduleService {
         Date date = new Date();
         //nếu thông tin lớp học chưa có trong kì học người dùng yêu cầu, thì phải đăng kí mới
         if (classTerm == null){
-            classTerm = new ClassTerm();
             Class aClass;
             Term term;
             try {
@@ -118,20 +134,16 @@ public class ScheduleServiceImpl implements ScheduleService {
         schedule.setUpdatedAt(date);
         schedule.setUpdatedBy(Teacher_id);
         schedule.setStatus(true);
-        Schedule sc;
         try {
-            sc = scheduleRepository.saveAndFlush(schedule);
+            schedule = scheduleRepository.saveAndFlush(schedule);
         }catch (Exception ex){
             throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
         }
         //Tạo danh sách điểm danh sau khi thêm thành công thời khóa biểu
         List<Registration> registrationList = classTerm.getAClass().getRegistrationList();
         for(int i = 0; i < registrationList.size(); i++){
-            System.out.println(Teacher_id);
-            System.out.println(registrationList.get(i).getId());
-            System.out.println(sc.getId());
-            attendanceService.createAttendance(Teacher_id, registrationList.get(i), sc);
+            attendanceService.createAttendance(Teacher_id, registrationList.get(i), schedule);
         }
-        return "Success";
+        return "success";
     }
 }

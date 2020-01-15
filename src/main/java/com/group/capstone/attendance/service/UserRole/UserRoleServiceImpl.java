@@ -1,6 +1,6 @@
 package com.group.capstone.attendance.service.UserRole;
 
-import com.group.capstone.attendance.Common.ErrorMessage;
+import com.group.capstone.attendance.common.ErrorMessage;
 import com.group.capstone.attendance.entity.Role;
 import com.group.capstone.attendance.entity.User;
 import com.group.capstone.attendance.entity.UserRole;

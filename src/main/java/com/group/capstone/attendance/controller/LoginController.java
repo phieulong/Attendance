@@ -1,6 +1,5 @@
 package com.group.capstone.attendance.controller;
 
-import com.group.capstone.attendance.Common.ErrorMessage;
 import com.group.capstone.attendance.model.User.dto.UserLoginInfoDetailDto;
 import com.group.capstone.attendance.model.User.request.UserLoginRequest;
 import com.group.capstone.attendance.service.User.UserService;

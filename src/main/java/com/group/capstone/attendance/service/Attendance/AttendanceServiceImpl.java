@@ -1,8 +1,7 @@
 package com.group.capstone.attendance.service.Attendance;
 
-import com.group.capstone.attendance.Common.ErrorMessage;
+import com.group.capstone.attendance.common.ErrorMessage;
 import com.group.capstone.attendance.entity.Attendance;
-import com.group.capstone.attendance.entity.Class;
 import com.group.capstone.attendance.entity.Registration;
 import com.group.capstone.attendance.entity.Schedule;
 import com.group.capstone.attendance.exception.ErrorServerException;

@@ -1,5 +1,6 @@
 package com.group.capstone.attendance.controller;
 
+import com.group.capstone.attendance.entity.Schedule;
 import com.group.capstone.attendance.model.Attendance.dto.TeacherAttendanceInfo;
 import com.group.capstone.attendance.model.Category.dto.CategoryInfoDto;
 import com.group.capstone.attendance.model.Class.dto.ClassDto;
@@ -61,7 +62,7 @@ public class TeacherController {
     public ResponseEntity<?> getScheduleByIdTeacher(String date) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         int id = (Integer)authentication.getCredentials();
-        List<TeacherScheduleDto> teacherScheduleDtoList = scheduleService.getScheduleByIdTeacher(id, date);
+        List<TeacherScheduleDto> teacherScheduleDtoList = scheduleService.getScheduleByTeacherId(id, date);
         return ResponseEntity.ok(teacherScheduleDtoList);
     }
     @ApiOperation(value = "Get a teacher info", response = UserInfo.class)

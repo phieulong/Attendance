@@ -1,4 +1,4 @@
-package com.group.capstone.attendance.Common;
+package com.group.capstone.attendance.common;
 
 public class ErrorMessage {
     public static String ERROR_SERVER = "Server is getting in troubles";
