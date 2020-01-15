@@ -69,14 +69,15 @@ public class ScheduleServiceImpl implements ScheduleService {
     //Service get tất cả thông tin buổi học trong ngày của giáo viên được gửi từ client
     //teacher_id được lấy từ token
     public List<TeacherScheduleDto> getScheduleByTeacherId (int teacher_id, String date){
+        List<TeacherScheduleDto> teacherScheduleDtoList;
         try {
-            List<TeacherScheduleDto> teacherScheduleDtoList = scheduleRepository.getScheduleByIdTeacher(teacher_id, date);
-            if (teacherScheduleDtoList.isEmpty())
-                throw new RecordNotFoundException(ErrorMessage.NOT_FOUND);
-            return teacherScheduleDtoList;
+            teacherScheduleDtoList = scheduleRepository.getScheduleByIdTeacher(teacher_id, date);
         }catch (Exception ex){
             throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
         }
+        if (teacherScheduleDtoList.isEmpty())
+            throw new RecordNotFoundException(ErrorMessage.NOT_FOUND);
+        return teacherScheduleDtoList;
     }
 
     //Service tạo thời khóa biểu
