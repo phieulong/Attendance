@@ -15,6 +15,8 @@ import java.util.Date;
 public class ClassTermServiceImpl implements ClassTermService{
     @Autowired
     private ClassTermRepository classTermRepository;
+
+    //đăng kí lớp học và kì học mới
     public ClassTerm createClassTerm(int Teacher_id, Class aClass, Term term){
         Date date = new Date();
         ClassTerm classTerm = new ClassTerm();

@@ -8,13 +8,14 @@ import com.group.capstone.attendance.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
+
+    //lấy ra danh sách tất cả các slot học
     public List<CategoryInfoDto> getAllCategoryInfo(){
         List<CategoryInfoDto> categoryInfoDtoList;
         try {

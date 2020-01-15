@@ -16,14 +16,17 @@ public class ClassServiceImpl implements ClassService{
     @Autowired
     private ClassRepository classRepository;
 
+    //lấy ra tất cả thông tin lớp học
     public List<ClassDto> getAllClassInfo(){
         List<ClassDto> classDtoList;
         try {
             classDtoList = classRepository.getAllClassInfo();
         }catch (Exception ex){
+            //trong quá trình tương tác với database nếu xảy ra lỗi trả về message
             throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
         }
         if (classDtoList.isEmpty())
+            //nếu k tìm thấy class nào trả về message null
             throw new RecordNotFoundException(ErrorMessage.NOT_FOUND);
         return classDtoList;
     }

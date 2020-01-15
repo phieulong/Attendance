@@ -1,5 +1,6 @@
 package com.group.capstone.attendance.security;
 
+import com.group.capstone.attendance.exception.RecordNotFoundException;
 import com.group.capstone.attendance.model.User.dto.UserLoginInfoDto;
 import com.group.capstone.attendance.service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class CustomUserDetailService implements UserDetailsService {
             // Trả về thông tin để kiểm tra xác thực: username, password, quyền
             return new org.springframework.security.core.userdetails.User(account, userLoginInfoDto.getPassword(), authorities);
         } else {
-            throw new UsernameNotFoundException("user get email " + account + " does not exist.");
+            throw new RecordNotFoundException("user get email " + account + " does not exist.");
         }
     }
 }

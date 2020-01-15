@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,24 +92,35 @@ public class ScheduleServiceImpl implements ScheduleService {
     //Sử dụng transaction khi xảy ra lỗi trong quá trình query vào database
     @Transactional
     public String createSchedule(int Teacher_id, CreateScheduleRequest createScheduleRequest){
-        ClassTerm classTerm;
+        ClassTerm classTerm = new ClassTerm();
+        Class aClass = new Class();
+        Term term = new Term();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String currentDate = dateFormat.format(date);
+        if(createScheduleRequest.getDate().toString().compareTo(currentDate) < 0)
+            throw new BadRequest("Can not insert this record, caused by INVALID SCHEDULE DATE");
+        try {
+            aClass = classRepository.findById(createScheduleRequest.getClassId());
+            term = termRepository.findById(createScheduleRequest.getTermId());
+        }catch (Exception ex){
+            throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
+        }
+        String timeBegin = term.getTimeBegin().toString();
+        timeBegin = timeBegin.split(" ")[0];
+        String timeEnd = term.getTimeEnd().toString();
+        timeEnd = timeEnd.split(" ")[0];
+        if(createScheduleRequest.getDate().toString().compareTo(timeEnd) > 0 ||
+                createScheduleRequest.getDate().toString().compareTo(timeBegin) < 0)
+            throw new BadRequest("Can not insert this record, caused by INVALID SCHEDULE DATE");
         try{
             classTerm = classTermRepository.getClassTermIdByClassIdAndTermId
                 (createScheduleRequest.getClassId(), createScheduleRequest.getTermId());
         }catch (Exception ex){
             throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
         }
-        Date date = new Date();
         //nếu thông tin lớp học chưa có trong kì học người dùng yêu cầu, thì phải đăng kí mới
         if (classTerm == null){
-            Class aClass;
-            Term term;
-            try {
-                aClass = classRepository.findById(createScheduleRequest.getClassId());
-                term = termRepository.findById(createScheduleRequest.getTermId());
-            }catch (Exception ex){
-                throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
-            }
             classTerm = classTermService.createClassTerm(Teacher_id, aClass, term);
         }else{
             List<Schedule> scheduleList = scheduleRepository.checkDuplicate
