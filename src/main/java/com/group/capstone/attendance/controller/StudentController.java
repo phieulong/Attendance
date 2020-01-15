@@ -44,19 +44,23 @@ public class StudentController {
         return ResponseEntity.ok(studentScheduleDetailDtoList);
     }
 
+    //Controller điểm danh bởi sinh viên
+    //Student_id được lấy ra từ token, schedule_id được gửi lên từ client
     @ApiOperation(value="Take attendance by a student", response = String.class)
     @ApiResponses({
             @ApiResponse(code = 404, message="Record not found"),
             @ApiResponse(code = 500, message="Error Server"),
     })
-    @PutMapping("/attendance/{schedule_id}")
-    public ResponseEntity<?> setAttendanceBySt(@PathVariable int schedule_id) {
+    @PutMapping("/attendance/")
+    public ResponseEntity<?> setAttendanceBySt(int schedule_id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         int id = (Integer)authentication.getCredentials();
         String result = attendanceService.setAttendanceByStudent(id,schedule_id);
         return ResponseEntity.ok(result);
     }
 
+    //Controller lấy thông tin của sinh viên
+    //student_id được lấy từ token
     @ApiOperation(value = "Get a student info", response = UserInfo.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),

@@ -4,14 +4,21 @@ import com.group.capstone.attendance.common.ErrorMessage;
 import com.group.capstone.attendance.entity.Attendance;
 import com.group.capstone.attendance.entity.Registration;
 import com.group.capstone.attendance.entity.Schedule;
+import com.group.capstone.attendance.exception.BadRequest;
 import com.group.capstone.attendance.exception.ErrorServerException;
 import com.group.capstone.attendance.exception.RecordNotFoundException;
 import com.group.capstone.attendance.model.Attendance.dto.TeacherAttendanceInfo;
 import com.group.capstone.attendance.repository.AttendanceRepository;
+import com.group.capstone.attendance.repository.CategoryRepository;
+import com.group.capstone.attendance.repository.RegistrationRepository;
+import com.group.capstone.attendance.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -19,14 +26,27 @@ import java.util.List;
 public class AttendanceServiceImpl implements AttendanceService {
     @Autowired
     private AttendanceRepository attendanceRepository;
+    @Autowired
+    private RegistrationRepository registrationRepository;
 
     //Sinh viên tự điểm danh, set is_present bằng true
     //student_id lấy từ token, schedule_id gửi lên từ client
     //log lại thông tin sinh viên update
     public String setAttendanceByStudent(int Student_id, int Schedule_id){
+        Date date = new Date();
         Attendance attendance;
+        Registration registration;
         try {
-            attendance = attendanceRepository.findByRegistrationAndSchedule(Student_id, Schedule_id);
+            System.out.println(Student_id);
+            registration = registrationRepository.findByUserId(Student_id);
+        }catch (Exception ex){
+            //trong quá trình tương tác với database nếu có lỗi trả về message
+            throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
+        }
+        if (registration == null)
+            throw new RecordNotFoundException(ErrorMessage.NOT_FOUND);
+        try {
+            attendance = attendanceRepository.findByScheduleAndRegistration(Schedule_id, registration.getId());
         }catch (Exception ex){
             //trong quá trình tương tác với database nếu có lỗi trả về message
             throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
@@ -36,7 +56,6 @@ public class AttendanceServiceImpl implements AttendanceService {
             throw new RecordNotFoundException(ErrorMessage.NOT_FOUND);
         attendance.setPresent(true);
         attendance.setUpdatedBy(Student_id);
-        Date date = new Date();
         attendance.setUpdatedAt(date);
         try{
             attendanceRepository.saveAndFlush(attendance);

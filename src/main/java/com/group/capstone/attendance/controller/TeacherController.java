@@ -53,6 +53,8 @@ public class TeacherController {
     @Autowired
     private CategoryService categoryService;
 
+    //Controller lấy danh sách thời khóa biểu theo ngày của từng giáo viên
+    //teacher_id được lấy trong token, ngày được gửi lên từ client
     @ApiOperation(value="Get a schedule list by teacher_id", response = TeacherScheduleDto.class)
     @ApiResponses({
             @ApiResponse(code = 404, message="Record not found"),
@@ -65,12 +67,14 @@ public class TeacherController {
         List<TeacherScheduleDto> teacherScheduleDtoList = scheduleService.getScheduleByTeacherId(id, date);
         return ResponseEntity.ok(teacherScheduleDtoList);
     }
+
+    //Controller lấy thông tin của một giáo viên,
+    //teacher_id được lấy ra từ tokern
     @ApiOperation(value = "Get a teacher info", response = UserInfo.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),
             @ApiResponse(code = 500, message = "Error Server"),
     })
-
     @GetMapping("/info/")
     public ResponseEntity<?> getTeacherInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -79,6 +83,8 @@ public class TeacherController {
         return ResponseEntity.ok(userInfo);
     }
 
+    //Controller lấy ra danh sách điểm danh của một lớp
+    //schedule_id được gửi lên từ client
     @ApiOperation(value = "Get a attendance list by teacher", response = TeacherAttendanceInfo.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),
@@ -90,6 +96,7 @@ public class TeacherController {
         return ResponseEntity.ok(teacherAttendanceInfoList);
     }
 
+    //Controller lấy ra danh sách giáo viên và thông tin của từng giáo viên
     @ApiOperation(value = "Get all teacher info", response = UserInfo.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),
@@ -101,6 +108,7 @@ public class TeacherController {
         return ResponseEntity.ok(userInfoList);
     }
 
+    //Controller lấy ra danh sách các lớp và thông tin từng lớp
     @ApiOperation(value = "Get all class info", response = ClassDto.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),
@@ -112,6 +120,7 @@ public class TeacherController {
         return ResponseEntity.ok(classDtoList);
     }
 
+    //Controller lấy ra danh sách môn học và thông tin từng môn
     @ApiOperation(value = "Get all subject info", response = SubjectDto.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),
@@ -123,7 +132,8 @@ public class TeacherController {
         return ResponseEntity.ok(subjectDtoList);
     }
 
-    @ApiOperation(value = "Get all subject info", response = RoomDto.class)
+    //Controller lấy ra danh sách phòng học và thông tin từng phòng
+    @ApiOperation(value = "Get all room info", response = RoomDto.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),
             @ApiResponse(code = 500, message = "Error Server"),
@@ -134,6 +144,7 @@ public class TeacherController {
         return ResponseEntity.ok(roomDtoList);
     }
 
+    //Controller lấy ra danh sách kì học và thông tin từng kì
     @ApiOperation(value = "Get all term info", response = TermDto.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),
@@ -145,6 +156,7 @@ public class TeacherController {
         return ResponseEntity.ok(termDtoList);
     }
 
+    //Controller lấy ra danh sách các tiết học và thông tin từng tiết
     @ApiOperation(value = "Get all category info", response = CategoryInfoDto.class)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Record not found"),
@@ -186,6 +198,8 @@ public class TeacherController {
         return ResponseEntity.ok(userInfo);
     }
 
+    //Controller điểm danh bới giáo viên, có thể sửa trạng thái từ true sang false và ngược lại
+    //id, schedule_id và isPresent được gửi lên từ client
     @ApiOperation(value="Take attendance by a teacher", response = String.class)
     @ApiResponses({
             @ApiResponse(code = 404, message="Record not found"),

@@ -28,4 +28,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
                                         "join class cl on cl.id = ct.class_id\n" +
                                         "where cl.id = ?1")
     public List<Schedule> getAllByClassId(int class_id);
+
+    @Query(nativeQuery = true, value = "select *\n" +
+                                        "from schedule\n" +
+                                        "where id = ?1 ")
+    public Schedule findById(int id);
 }
