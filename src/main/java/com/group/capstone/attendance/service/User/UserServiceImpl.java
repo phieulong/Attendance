@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -151,14 +152,38 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserInfo getStudentInfo(int id){
-        return userRepository.getStudentInfo(id);
+        UserInfo userInfo = new UserInfo();
+        try {
+            userInfo = userRepository.getStudentInfo(id);
+        }catch (Exception ex){
+            throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
+        }
+        if(userInfo == null)
+            throw new RecordNotFoundException(ErrorMessage.NOT_FOUND);
+        return userInfo;
     }
 
     public UserInfo getTeacherInfo(int id){
-        return userRepository.getTeacherInfo(id);
+        UserInfo userInfo = new UserInfo();
+        try {
+            userInfo = userRepository.getTeacherInfo(id);
+        }catch (Exception ex){
+            throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
+        }
+        if(userInfo == null)
+            throw new RecordNotFoundException(ErrorMessage.NOT_FOUND);
+        return userInfo;
     }
 
     public List<UserInfo> getAllTeacher(){
-        return userRepository.getAllTeacher();
+        List<UserInfo> userInfoList = new ArrayList<>();
+        try {
+            userInfoList = userRepository.getAllTeacher();
+        }catch (Exception ex){
+            throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
+        }
+        if(userInfoList.isEmpty())
+            throw new RecordNotFoundException(ErrorMessage.NOT_FOUND);
+        return userInfoList;
     }
 }

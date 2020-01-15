@@ -51,19 +51,23 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<StudentScheduleDto> studentScheduleDtoList;
         try {
             studentScheduleDtoList = scheduleRepository.getScheduleByIdStudent(student_id, date);
-            if(studentScheduleDtoList.isEmpty())
-                throw new RecordNotFoundException(ErrorMessage.NOT_FOUND);
-            List<StudentScheduleDetailDto> studentScheduleDetailDtoList = new ArrayList<>();
-            List<String> avatar_5_friends;
-            for(StudentScheduleDto std : studentScheduleDtoList){
-                avatar_5_friends = userRepository.getUserPictureByScheduleId(std.getSchedule_id());
-                System.out.println(avatar_5_friends);
-                studentScheduleDetailDtoList.add(ScheduleMapper.toStudentScheduleDetailDto(std,avatar_5_friends));
-            }
-        return studentScheduleDetailDtoList;
         }catch (Exception ex){
             throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
         }
+        if(studentScheduleDtoList.isEmpty())
+            throw new RecordNotFoundException(ErrorMessage.NOT_FOUND);
+        List<StudentScheduleDetailDto> studentScheduleDetailDtoList = new ArrayList<>();
+        List<String> avatar_5_friends;
+        for(StudentScheduleDto std : studentScheduleDtoList){
+            try {
+            avatar_5_friends = userRepository.getUserPictureByScheduleId(std.getSchedule_id());
+            }catch (Exception ex){
+                throw new ErrorServerException(ErrorMessage.ERROR_SERVER);
+            }
+            studentScheduleDetailDtoList.add(ScheduleMapper.toStudentScheduleDetailDto(std,avatar_5_friends));
+        }
+        return studentScheduleDetailDtoList;
+
     }
 
     //Service get tất cả thông tin buổi học trong ngày của giáo viên được gửi từ client
