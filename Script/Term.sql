@@ -1,0 +1,3 @@
+INSERT INTO `attendance_capstone`.`term` (`id`, `created_at`, `created_by`, `name`, `status`, `updated_at`, `updated_by`, `time_begin`, `time_end`) VALUES ('1', '2017/01/01', '1', 'Spring-2020', True, '2017/01/01', '1', '2020/01/01', '2020/03/31');
+INSERT INTO `attendance_capstone`.`term` (`id`, `created_at`, `created_by`, `name`, `status`, `updated_at`, `updated_by`, `time_begin`, `time_end`) VALUES ('2', '2017/01/01', '1', 'Summer-2020', True, '2017/01/01', '1', '2020/04/01', '2020/06/30');
+INSERT INTO `attendance_capstone`.`term` (`id`, `created_at`, `created_by`, `name`, `status`, `updated_at`, `updated_by`, `time_begin`, `time_end`) VALUES ('3', '2017/01/01', '1', 'Winter-2019', True, '2017/01/01', '1', '2019/10/01', '2019/12/31');

@@ -1,0 +1,3 @@
+INSERT INTO `attendance_capstone`.`subject` (`id`, `created_at`, `created_by`, `description`, `name`, `status`, `updated_at`, `updated_by`) VALUES ('1', '2017/01/01', '1', 'Math Subject', 'Math', True, '2017/01/01', '1');
+INSERT INTO `attendance_capstone`.`subject` (`id`, `created_at`, `created_by`, `description`, `name`, `status`, `updated_at`, `updated_by`) VALUES ('2', '2017/01/01', '1', 'Physical Subject', 'Physical', True, '2017/01/01', '1');
+INSERT INTO `attendance_capstone`.`subject` (`id`, `created_at`, `created_by`, `description`, `name`, `status`, `updated_at`, `updated_by`) VALUES ('3', '2017/01/01', '1', 'English Subject', 'English', True, '2017/01/01', '1');

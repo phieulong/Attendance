@@ -1,0 +1,3 @@
+INSERT INTO `attendance_capstone`.`class` (`id`, `created_at`, `created_by`, `name`, `status`, `updated_at`, `updated_by`, `user_id`) VALUES ('1', '2017/01/01', '1', '12A1', True, '2017/01/01', '1', '1');
+INSERT INTO `attendance_capstone`.`class` (`id`, `created_at`, `created_by`, `name`, `status`, `updated_at`, `updated_by`, `user_id`) VALUES ('2', '2017/01/01', '1', '11D1', True, '2017/01/01', '1', '5');
+INSERT INTO `attendance_capstone`.`class` (`id`, `created_at`, `created_by`, `name`, `status`, `updated_at`, `updated_by`, `user_id`) VALUES ('3', '2017/01/01', '1', '10T1', True, '2017/01/01', '1', '5');
